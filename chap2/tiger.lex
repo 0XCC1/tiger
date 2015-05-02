@@ -107,7 +107,7 @@ else					{adjust(); return ELSE;}
 do 						{adjust(); return DO;}
 of   					{adjust(); return OF;}
 nil  					{adjust(); return NIL;}
-{id}					{adjust(); return ID;}
+{id}					{adjust(); yylval.sval = strdup(yytext); return ID;}
 
 
 \"					    {adjust(); init_string(); BEGIN string;}

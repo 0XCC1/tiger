@@ -1063,7 +1063,7 @@ YY_RULE_SETUP
 case 44:
 YY_RULE_SETUP
 #line 110 "tiger.lex"
-{adjust(); return ID;}
+{adjust(); yylval.sval = strdup(yytext); return ID;}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
