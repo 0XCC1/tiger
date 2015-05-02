@@ -2,6 +2,8 @@ let
 
  type any = {any : int}
  var buffer := getchar()
+ var a:="aaaaaaa"
+ var b:="bbb\"ddd"
 
 function readint(any: any) : int =
  let var i := 0

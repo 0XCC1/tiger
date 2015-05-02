@@ -112,8 +112,6 @@ nil  					{adjust(); return NIL;}
 
 \"					    {adjust(); init_string(); BEGIN string;}
 <string>{
-				
-
 	\" 					{
 							adjust(); 
 							end_string(); 
@@ -121,8 +119,13 @@ nil  					{adjust(); return NIL;}
 							BEGIN (0); 
 							return STRING;
 						}
-	\\[0-9]{3}		    { adjust();  append_char_to_string(*yytext);}
-	.					{ adjust();  append_char_to_string(*yytext);}
+	\\\"				{	
+							adjust();
+							append_char_to_string(*yytext);
+							append_char_to_string(yytext[1]);
+							//yylval.sval = strdup(str);
+						}
+	.					{ adjust(); append_char_to_string(*yytext); }
 }
 
 "/*"						{/*printf("begin comment");*/ adjust();  BEGIN comment;}
