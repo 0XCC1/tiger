@@ -66,7 +66,8 @@ A_expList A_PairExpList(A_exp head, A_expList tail) {
 
 A_expList A_LastExpList(A_exp last) {
   A_expList e = checked_malloc(sizeof *e);
-  e->kind=A_lastExpList; e->u.last=last;
+  e->kind=A_lastExpList; 
+  e->u.last=last;
   return e;
 }
 

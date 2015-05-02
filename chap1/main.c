@@ -8,7 +8,7 @@ int maxargs(A_stm stm){
 	if (stm->kind==A_printStm)
 	{//打印语句
 		result=1;
-		
+
 	}else if (stm->kind==A_assignStm)
 	{//赋值语句
 		result+=maxexpargs(stm->u.assign.exp);
@@ -29,10 +29,25 @@ int maxexpargs(A_exp exp){
 	{
 		result+=maxargs(exp->u.eseq.stm);
 		result+=maxexpargs(exp->u.eseq.exp);
+	}else if (exp->kind==A_pairExpList)
+	{
+		result+=maxexplistargs(exp->u.eseq.exp);	
 	}
 	return result;
 }
 
+int maxexplistargs(A_expList exp){
+	int result=0;
+	if (exp->kind==A_lastExpList)
+	{
+		result+=maxexpargs(exp->u.last);
+	}else if (exp->kind==A_pairExpList)
+	{
+		result+=maxexpargs(exp->u.pair.head);
+		result+=maxexplistargs(exp->u.pair.tail);
+	}
+	return result;
+}
 
 
 
