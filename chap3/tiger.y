@@ -49,7 +49,7 @@ void yyerror(char *s)
 
 program:	exp
 
-exp:    lvalue
+exp:    lvalue	{printf("lvalue to exp\n");}
    |    stmt
    |	arraydefine
    |	record
@@ -66,7 +66,7 @@ exp:    lvalue
    |	BREAK
    
    
-comparestmt :   exp EQ exp
+comparestmt :   exp EQ exp	{ printf("eq statment \n"); }
 			   | exp NEQ exp
 			   | exp GT exp
 			   | exp LT exp
@@ -81,9 +81,11 @@ arraydefine: id LBRACK exp RBRACK OF exp
 
 id:     ID {  printf("id %s\n", $1);}
 
-lvalue: id		{printf("lvalue \n");}
-      | lvalue DOT id
-      | lvalue LBRACK exp RBRACK {printf("%s\n", "ARRAY");}
+lvalue: id lvalue_ext		 
+
+lvalue_ext: DOT id lvalue_ext
+      |  LBRACK exp RBRACK lvalue_ext{printf("%s\n", "ARRAY");}
+	  |
 
 	  
 //各种语句

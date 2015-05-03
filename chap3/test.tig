@@ -1,5 +1,4 @@
 /* A program to solve the 8-queens problem */
-
 let
     var N := 8
 
@@ -14,7 +13,7 @@ let
     function printboard() =
        (for i := 0 to N-1
 	 do (for j := 0 to N-1 
-	      do print(if col[i]=j then " O" else " .");
+	      do print(if col[i] = j then " O" else " .");
 	     print("\n"));
          print("\n"))
 

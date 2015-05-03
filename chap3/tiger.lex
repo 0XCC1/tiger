@@ -88,8 +88,8 @@ newline (\r\n|\n)
 ";" 					{adjust(); return SEMICOLON;}
 "("						{adjust(); return LPAREN;}
 ")"						{adjust(); return RPAREN;}
-"["						{adjust(); return LBRACK;}
-"]" 					{adjust(); return RBRACK;}
+"["						{adjust(); printf("lex: [\n"); return LBRACK;}
+"]" 					{adjust(); printf("lex: ]\n"); return RBRACK;}
 "{"						{adjust(); return LBRACE;}
 "}"						{adjust(); return RBRACE;}
 "+"						{adjust(); dbgprint(0,"plus\n"); return PLUS;}
@@ -97,7 +97,7 @@ newline (\r\n|\n)
 "."						{adjust(); return DOT;}
 "/"						{adjust(); return DIVIDE;}
 "*"						{adjust(); return TIMES;}
-"="						{adjust(); printf("assign\n"); return EQ;}
+"="						{adjust(); printf("eq \n"); return EQ;}
 "<>"					{adjust(); return NEQ;}
 "<"						{adjust(); return LT;}
 "<="					{adjust(); return LE;}

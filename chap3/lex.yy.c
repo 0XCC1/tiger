@@ -898,12 +898,12 @@ YY_RULE_SETUP
 case 8:
 YY_RULE_SETUP
 #line 91 "tiger.lex"
-{adjust(); return LBRACK;}
+{adjust(); printf("lex: [\n"); return LBRACK;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 92 "tiger.lex"
-{adjust(); return RBRACK;}
+{adjust(); printf("lex: ]\n"); return RBRACK;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
@@ -943,7 +943,7 @@ YY_RULE_SETUP
 case 17:
 YY_RULE_SETUP
 #line 100 "tiger.lex"
-{adjust(); printf("assign\n"); return EQ;}
+{adjust(); printf("eq \n"); return EQ;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
