@@ -27,7 +27,7 @@ void yyerror(char *s)
 %nonassoc EQ NEQ LT LE GT GE
 %left PLUS MINUS
 %left TIMES DIVIDE
-
+%right DO OF
 %right UMINUS
 
 %nonassoc LOWER_THAN_ELSE
@@ -53,10 +53,23 @@ exp:    lvalue
    |    stmt
    |	arraydefine
    |	record
+   |	comparestmt
    |    exp PLUS exp {printf(" + \n"); }
    |    exp MINUS exp {printf(" - \n"); }
+   |	exp TIMES exp
+   |	exp DIVIDE exp
    |    INT
    |	STRING
+   |	NIL
+   
+comparestmt :   exp EQ exp
+			   | exp NEQ exp
+			   | exp GT exp
+			   | exp LT exp
+			   | exp GE exp
+			   | exp LE exp
+			   | exp AND exp
+			   | exp OR exp 
 
 
 //与 lvalue 有已经规约冲突
@@ -89,8 +102,12 @@ decs: dec decs
 
 dec : tydec
 	| vardec 	{/*printf("declare a var\n");*/}
-	//| fundec
+	| fundec
 
+//函数定义
+fundec:	FUNCTION id LPAREN tyfields RPAREN EQ exp {/*没有返回类型*/}
+	|	FUNCTION id LPAREN tyfields RPAREN COLON id EQ exp {/*有返回类型*/}
+	
 //记录定义
 record: id LBRACE recordfields RBRACE
 
@@ -108,6 +125,7 @@ ty:	id
 	| LBRACE tyfields RBRACE
 	| ARRAY OF id 		{ printf("declare array type\n");}
 	
+//id1 :int, id2 string
 tyfields :
 		|id COLON id
 		|id COLON id COMMA tyfields

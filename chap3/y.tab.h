@@ -61,30 +61,30 @@ extern int yydebug;
     MINUS = 271,
     TIMES = 272,
     DIVIDE = 273,
-    UMINUS = 274,
-    LOWER_THAN_ELSE = 275,
-    ELSE = 276,
-    COMMA = 277,
-    COLON = 278,
-    SEMICOLON = 279,
-    LPAREN = 280,
-    RPAREN = 281,
-    LBRACK = 282,
-    RBRACK = 283,
-    LBRACE = 284,
-    RBRACE = 285,
-    DOT = 286,
-    ARRAY = 287,
-    IF = 288,
-    THEN = 289,
-    WHILE = 290,
-    FOR = 291,
-    TO = 292,
-    DO = 293,
-    LET = 294,
-    IN = 295,
-    END = 296,
-    OF = 297,
+    DO = 274,
+    OF = 275,
+    UMINUS = 276,
+    LOWER_THAN_ELSE = 277,
+    ELSE = 278,
+    COMMA = 279,
+    COLON = 280,
+    SEMICOLON = 281,
+    LPAREN = 282,
+    RPAREN = 283,
+    LBRACK = 284,
+    RBRACK = 285,
+    LBRACE = 286,
+    RBRACE = 287,
+    DOT = 288,
+    ARRAY = 289,
+    IF = 290,
+    THEN = 291,
+    WHILE = 292,
+    FOR = 293,
+    TO = 294,
+    LET = 295,
+    IN = 296,
+    END = 297,
     BREAK = 298,
     NIL = 299,
     FUNCTION = 300,
@@ -109,30 +109,30 @@ extern int yydebug;
 #define MINUS 271
 #define TIMES 272
 #define DIVIDE 273
-#define UMINUS 274
-#define LOWER_THAN_ELSE 275
-#define ELSE 276
-#define COMMA 277
-#define COLON 278
-#define SEMICOLON 279
-#define LPAREN 280
-#define RPAREN 281
-#define LBRACK 282
-#define RBRACK 283
-#define LBRACE 284
-#define RBRACE 285
-#define DOT 286
-#define ARRAY 287
-#define IF 288
-#define THEN 289
-#define WHILE 290
-#define FOR 291
-#define TO 292
-#define DO 293
-#define LET 294
-#define IN 295
-#define END 296
-#define OF 297
+#define DO 274
+#define OF 275
+#define UMINUS 276
+#define LOWER_THAN_ELSE 277
+#define ELSE 278
+#define COMMA 279
+#define COLON 280
+#define SEMICOLON 281
+#define LPAREN 282
+#define RPAREN 283
+#define LBRACK 284
+#define RBRACK 285
+#define LBRACE 286
+#define RBRACE 287
+#define DOT 288
+#define ARRAY 289
+#define IF 290
+#define THEN 291
+#define WHILE 292
+#define FOR 293
+#define TO 294
+#define LET 295
+#define IN 296
+#define END 297
 #define BREAK 298
 #define NIL 299
 #define FUNCTION 300

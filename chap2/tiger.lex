@@ -8,6 +8,22 @@
 #define	OVER_MEM_ERR printf("%s (max_length: %d)", \
 						"usage: string out of memrory!", MAX_LENGTH);\
 					 	exit(1);
+						
+#define PINFO 0
+#define PALLINFO 0
+						
+#if PINFO
+	#if PALLINFO
+		#define dbgprint(show,fmt,args...) printf(fmt,##args);
+	#else
+		#define dbgprint(show,fmt,args...) if(show==1){printf(fmt,##args);}else{}
+	#endif
+#else
+	#define dbgprint(fmt,args...)
+#endif
+
+ 						
+
 
 #define MAX_LENGTH 512
 int charPos=1;
@@ -58,15 +74,15 @@ void append_char_to_string(char ch) {
 %x string
 %x comment
 
-id 		[A-Za-z][A-Za-z0-9]*
+id 		[A-Za-z][A-Za-z0-9_]*
 integer [0-9]+
 ws      [ \t]+
 newline (\r\n|\n)
 
 
 %%
-{ws}	 				{adjust();  printf("ws\n"); continue;}
-{newline}	 			{adjust(); printf("newline\n"); EM_newline(); continue;}
+{ws}	 				{adjust();  dbgprint(0,"ws\n"); continue;}
+{newline}	 			{adjust(); dbgprint(1,"newline\n"); EM_newline(); continue;}
 ","	 					{adjust(); return COMMA;}
 ":" 					{adjust(); return COLON;}
 ";" 					{adjust(); return SEMICOLON;}
@@ -76,7 +92,7 @@ newline (\r\n|\n)
 "]" 					{adjust(); return RBRACK;}
 "{"						{adjust(); return LBRACE;}
 "}"						{adjust(); return RBRACE;}
-"+"						{adjust(); printf("plus\n"); return PLUS;}
+"+"						{adjust(); dbgprint(0,"plus\n"); return PLUS;}
 "-"						{adjust(); return MINUS;}
 "."						{adjust(); return DOT;}
 "/"						{adjust(); return DIVIDE;}
@@ -91,24 +107,24 @@ newline (\r\n|\n)
 "|"						{adjust(); return OR;}
 ":="					{adjust(); return ASSIGN;}
 for  	 				{adjust(); return FOR;}
-{integer}	 			{adjust(); yylval.ival=atoi(yytext); printf("int %d\n",yylval.ival); return INT;}
+{integer}	 			{adjust(); yylval.ival=atoi(yytext); dbgprint(0,"int %d\n",yylval.ival); return INT;}
 while					{adjust(); return FOR; }
 to 						{adjust(); return TO;}
 break 					{adjust(); return BREAK;}
 let						{adjust(); return LET;}
 in 						{adjust(); return IN;}
 end 					{adjust(); return END;}
-function 				{adjust(); return FUNCTION;}
+function 				{adjust(); dbgprint(0,"function\n"); return FUNCTION;}
 var 					{adjust(); return VAR;}
 type					{adjust(); return TYPE;}
 array					{adjust(); return ARRAY;}
-if						{adjust(); printf("ifffff\n");  return IF;}
+if						{adjust(); dbgprint(0,"ifffff\n");  return IF;}
 then					{adjust(); return THEN;}
 else					{adjust(); return ELSE;}
 do 						{adjust(); return DO;}
 of   					{adjust(); return OF;}
 nil  					{adjust(); return NIL;}
-{id}					{adjust(); yylval.sval = strdup(yytext); printf("idddd\n");  return ID;}
+{id}					{adjust(); yylval.sval = strdup(yytext);   dbgprint(1,"%s\n",yylval.sval);  return ID;}
 
 
 \"					    {adjust(); init_string(); BEGIN string;}
@@ -118,6 +134,7 @@ nil  					{adjust(); return NIL;}
 							end_string(); 
 							yylval.sval = strdup(str);
 							BEGIN (0); 
+							//printf("%s\n",yylval.sval);
 							return STRING;
 						}
 	\\\"				{	
@@ -137,4 +154,4 @@ nil  					{adjust(); return NIL;}
 
 
 
-.	     				{adjust(); EM_error(EM_tokPos,"illegal token");}
+.	     				{adjust(); ;EM_error(EM_tokPos,"illegal token"); printf("%s\n",yytext);}

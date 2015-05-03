@@ -9,7 +9,7 @@
 						"usage: string out of memrory!", MAX_LENGTH);\
 					 	exit(1);
 						
-#define PINFO 1
+#define PINFO 0
 #define PALLINFO 0
 						
 #if PINFO
@@ -74,7 +74,7 @@ void append_char_to_string(char ch) {
 %x string
 %x comment
 
-id 		[A-Za-z][A-Za-z0-9]*
+id 		[A-Za-z][A-Za-z0-9_]*
 integer [0-9]+
 ws      [ \t]+
 newline (\r\n|\n)
@@ -114,7 +114,7 @@ break 					{adjust(); return BREAK;}
 let						{adjust(); return LET;}
 in 						{adjust(); return IN;}
 end 					{adjust(); return END;}
-function 				{adjust(); return FUNCTION;}
+function 				{adjust(); dbgprint(0,"function\n"); return FUNCTION;}
 var 					{adjust(); return VAR;}
 type					{adjust(); return TYPE;}
 array					{adjust(); return ARRAY;}
@@ -124,7 +124,7 @@ else					{adjust(); return ELSE;}
 do 						{adjust(); return DO;}
 of   					{adjust(); return OF;}
 nil  					{adjust(); return NIL;}
-{id}					{adjust(); yylval.sval = strdup(yytext); dbgprint(0,"idddd\n");  return ID;}
+{id}					{adjust(); yylval.sval = strdup(yytext);   dbgprint(1,"%s\n",yylval.sval);  return ID;}
 
 
 \"					    {adjust(); init_string(); BEGIN string;}
