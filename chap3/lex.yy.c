@@ -943,7 +943,7 @@ YY_RULE_SETUP
 case 17:
 YY_RULE_SETUP
 #line 100 "tiger.lex"
-{adjust(); return EQ;}
+{adjust(); printf("assign\n"); return EQ;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
@@ -998,7 +998,7 @@ YY_RULE_SETUP
 case 28:
 YY_RULE_SETUP
 #line 111 "tiger.lex"
-{adjust(); return FOR; }
+{adjust(); return WHILE; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
@@ -1083,7 +1083,7 @@ YY_RULE_SETUP
 case 45:
 YY_RULE_SETUP
 #line 130 "tiger.lex"
-{adjust(); init_string(); BEGIN string;}
+{adjust(); printf("start string \n"); init_string(); BEGIN string;}
 	YY_BREAK
 
 case 46:
@@ -1094,7 +1094,7 @@ YY_RULE_SETUP
 							end_string(); 
 							yylval.sval = strdup(str);
 							BEGIN (0); 
-							//printf("%s\n",yylval.sval);
+							printf("string: %s\n",yylval.sval);
 							return STRING;
 						}
 	YY_BREAK
@@ -1111,7 +1111,7 @@ YY_RULE_SETUP
 case 48:
 YY_RULE_SETUP
 #line 146 "tiger.lex"
-{ adjust(); append_char_to_string(*yytext); }
+{ adjust(); printf("char: %c\n",*yytext); append_char_to_string(*yytext); }
 	YY_BREAK
 
 case 49:

@@ -1,14 +1,4 @@
-Terminals unused in grammar
-
-   DO
-   UMINUS
-   WHILE
-   FOR
-   TO
-   BREAK
-
-
-状态 11conflicts: 1 shift/reduce
+状态 16conflicts: 1 shift/reduce
 
 
 语法
@@ -26,126 +16,138 @@ Terminals unused in grammar
     8    | exp MINUS exp
     9    | exp TIMES exp
    10    | exp DIVIDE exp
-   11    | INT
-   12    | STRING
-   13    | NIL
+   11    | MINUS exp
+   12    | INT
+   13    | STRING
+   14    | NIL
+   15    | expblock
+   16    | BREAK
 
-   14 comparestmt: exp EQ exp
-   15            | exp NEQ exp
-   16            | exp GT exp
-   17            | exp LT exp
-   18            | exp GE exp
-   19            | exp LE exp
-   20            | exp AND exp
-   21            | exp OR exp
+   17 comparestmt: exp EQ exp
+   18            | exp NEQ exp
+   19            | exp GT exp
+   20            | exp LT exp
+   21            | exp GE exp
+   22            | exp LE exp
+   23            | exp AND exp
+   24            | exp OR exp
 
-   22 arraydefine: id LBRACK exp RBRACK OF exp
+   25 arraydefine: id LBRACK exp RBRACK OF exp
 
-   23 id: ID
+   26 id: ID
 
-   24 lvalue: id
-   25       | lvalue DOT id
-   26       | lvalue LBRACK exp RBRACK
+   27 lvalue: id
+   28       | lvalue DOT id
+   29       | lvalue LBRACK exp RBRACK
 
-   27 stmt: funccall
-   28     | assignstmt
-   29     | ifstmt
-   30     | letstmt
+   30 stmt: funccall
+   31     | assignstmt
+   32     | ifstmt
+   33     | letstmt
+   34     | forstmt
+   35     | whilestmt
 
-   31 letstmt: LET decs IN expseq END
+   36 whilestmt: WHILE exp DO exp
 
-   32 expseq: exp
-   33       | exp SEMICOLON expseq
-   34       | %empty
+   37 forstmt: FOR id ASSIGN exp TO exp DO exp
 
-   35 decs: dec decs
-   36     | %empty
+   38 expblock: LPAREN expseq RPAREN
 
-   37 dec: tydec
-   38    | vardec
-   39    | fundec
+   39 letstmt: LET decs IN expseq END
 
-   40 fundec: FUNCTION id LPAREN tyfields RPAREN EQ exp
-   41       | FUNCTION id LPAREN tyfields RPAREN COLON id EQ exp
+   40 expseq: exp
+   41       | exp SEMICOLON expseq
+   42       | %empty
 
-   42 record: id LBRACE recordfields RBRACE
+   43 decs: dec decs
+   44     | %empty
 
-   43 recordfields: id EQ exp
-   44             | id EQ exp COMMA recordfields
+   45 dec: tydec
+   46    | vardec
+   47    | fundec
 
-   45 vardec: VAR ID ASSIGN exp
-   46       | VAR id COLON id ASSIGN exp
+   48 fundec: FUNCTION id LPAREN tyfields RPAREN EQ exp
+   49       | FUNCTION id LPAREN tyfields RPAREN COLON id EQ exp
 
-   47 tydec: TYPE id EQ ty
+   50 record: id LBRACE recordfields RBRACE
 
-   48 ty: id
-   49   | LBRACE tyfields RBRACE
-   50   | ARRAY OF id
+   51 recordfields: id EQ exp
+   52             | id EQ exp COMMA recordfields
 
-   51 tyfields: %empty
-   52         | id COLON id
-   53         | id COLON id COMMA tyfields
+   53 vardec: VAR ID ASSIGN exp
+   54       | VAR id COLON id ASSIGN exp
 
-   54 ifstmt: IF exp THEN exp
-   55       | IF exp THEN exp ELSE exp
+   55 tydec: TYPE id EQ ty
 
-   56 assignstmt: lvalue ASSIGN exp
+   56 ty: id
+   57   | LBRACE tyfields RBRACE
+   58   | ARRAY OF id
 
-   57 funccall: id LPAREN args RPAREN
+   59 tyfields: %empty
+   60         | id COLON id
+   61         | id COLON id COMMA tyfields
 
-   58 args: exp COMMA args
-   59     | exp
+   62 ifstmt: IF exp THEN exp
+   63       | IF exp THEN exp ELSE exp
+
+   64 assignstmt: lvalue ASSIGN exp
+
+   65 funccall: id LPAREN args RPAREN
+
+   66 args: exp COMMA args
+   67     | exp
+   68     | %empty
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
 error (256)
-ID (258) 23 45
-STRING (259) 12
-INT (260) 11
-ASSIGN (261) 45 46 56
-AND (262) 20
-OR (263) 21
-EQ (264) 14 40 41 43 44 47
-NEQ (265) 15
-LT (266) 17
-LE (267) 19
-GT (268) 16
-GE (269) 18
+ID (258) 26 53
+STRING (259) 13
+INT (260) 12
+ASSIGN (261) 37 53 54 64
+AND (262) 23
+OR (263) 24
+EQ (264) 17 48 49 51 52 55
+NEQ (265) 18
+LT (266) 20
+LE (267) 22
+GT (268) 19
+GE (269) 21
 PLUS (270) 7
-MINUS (271) 8
+MINUS (271) 8 11
 TIMES (272) 9
 DIVIDE (273) 10
-DO (274)
-OF (275) 22 50
+DO (274) 36 37
+OF (275) 25 58
 UMINUS (276)
 LOWER_THAN_ELSE (277)
-ELSE (278) 55
-COMMA (279) 44 53 58
-COLON (280) 41 46 52 53
-SEMICOLON (281) 33
-LPAREN (282) 40 41 57
-RPAREN (283) 40 41 57
-LBRACK (284) 22 26
-RBRACK (285) 22 26
-LBRACE (286) 42 49
-RBRACE (287) 42 49
-DOT (288) 25
-ARRAY (289) 50
-IF (290) 54 55
-THEN (291) 54 55
-WHILE (292)
-FOR (293)
-TO (294)
-LET (295) 31
-IN (296) 31
-END (297) 31
-BREAK (298)
-NIL (299) 13
-FUNCTION (300) 40 41
-VAR (301) 45 46
-TYPE (302) 47
+ELSE (278) 63
+COMMA (279) 52 61 66
+COLON (280) 49 54 60 61
+SEMICOLON (281) 41
+LPAREN (282) 38 48 49 65
+RPAREN (283) 38 48 49 65
+LBRACK (284) 25 29
+RBRACK (285) 25 29
+LBRACE (286) 50 57
+RBRACE (287) 50 57
+DOT (288) 28
+ARRAY (289) 58
+IF (290) 62 63
+THEN (291) 62 63
+WHILE (292) 36
+FOR (293) 37
+TO (294) 37
+LET (295) 39
+IN (296) 39
+END (297) 39
+BREAK (298) 16
+NIL (299) 14
+FUNCTION (300) 48 49
+VAR (301) 53 54
+TYPE (302) 55
 
 
 Nonterminals, with rules where they appear
@@ -155,49 +157,56 @@ $accept (48)
 program (49)
     on left: 1, on right: 0
 exp (50)
-    on left: 2 3 4 5 6 7 8 9 10 11 12 13, on right: 1 7 8 9 10 14 15
-    16 17 18 19 20 21 22 26 32 33 40 41 43 44 45 46 54 55 56 58 59
+    on left: 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16, on right: 1 7 8
+    9 10 11 17 18 19 20 21 22 23 24 25 29 36 37 40 41 48 49 51 52 53
+    54 62 63 64 66 67
 comparestmt (51)
-    on left: 14 15 16 17 18 19 20 21, on right: 6
+    on left: 17 18 19 20 21 22 23 24, on right: 6
 arraydefine (52)
-    on left: 22, on right: 4
+    on left: 25, on right: 4
 id (53)
-    on left: 23, on right: 22 24 25 40 41 42 43 44 46 47 48 50 52 53
-    57
+    on left: 26, on right: 25 27 28 37 48 49 50 51 52 54 55 56 58 60
+    61 65
 lvalue (54)
-    on left: 24 25 26, on right: 2 25 26 56
+    on left: 27 28 29, on right: 2 28 29 64
 stmt (55)
-    on left: 27 28 29 30, on right: 3
-letstmt (56)
-    on left: 31, on right: 30
-expseq (57)
-    on left: 32 33 34, on right: 31 33
-decs (58)
-    on left: 35 36, on right: 31 35
-dec (59)
-    on left: 37 38 39, on right: 35
-fundec (60)
-    on left: 40 41, on right: 39
-record (61)
-    on left: 42, on right: 5
-recordfields (62)
-    on left: 43 44, on right: 42 44
-vardec (63)
-    on left: 45 46, on right: 38
-tydec (64)
-    on left: 47, on right: 37
-ty (65)
-    on left: 48 49 50, on right: 47
-tyfields (66)
-    on left: 51 52 53, on right: 40 41 49 53
-ifstmt (67)
-    on left: 54 55, on right: 29
-assignstmt (68)
-    on left: 56, on right: 28
-funccall (69)
-    on left: 57, on right: 27
-args (70)
-    on left: 58 59, on right: 57 58
+    on left: 30 31 32 33 34 35, on right: 3
+whilestmt (56)
+    on left: 36, on right: 35
+forstmt (57)
+    on left: 37, on right: 34
+expblock (58)
+    on left: 38, on right: 15
+letstmt (59)
+    on left: 39, on right: 33
+expseq (60)
+    on left: 40 41 42, on right: 38 39 41
+decs (61)
+    on left: 43 44, on right: 39 43
+dec (62)
+    on left: 45 46 47, on right: 43
+fundec (63)
+    on left: 48 49, on right: 47
+record (64)
+    on left: 50, on right: 5
+recordfields (65)
+    on left: 51 52, on right: 50 52
+vardec (66)
+    on left: 53 54, on right: 46
+tydec (67)
+    on left: 55, on right: 45
+ty (68)
+    on left: 56 57 58, on right: 55
+tyfields (69)
+    on left: 59 60 61, on right: 48 49 57 61
+ifstmt (70)
+    on left: 62 63, on right: 32
+assignstmt (71)
+    on left: 64, on right: 31
+funccall (72)
+    on left: 65, on right: 30
+args (73)
+    on left: 66 67 68, on right: 65 66
 
 
 State 0
@@ -207,968 +216,1408 @@ State 0
     ID      shift, and go to state 1
     STRING  shift, and go to state 2
     INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    program      转到状态 7
-    exp          转到状态 8
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
+    program      转到状态 12
+    exp          转到状态 13
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
 
 
 State 1
 
-   23 id: ID .
+   26 id: ID .
 
-    $default  reduce using rule 23 (id)
+    $default  reduce using rule 26 (id)
 
 
 State 2
 
-   12 exp: STRING .
-
-    $default  reduce using rule 12 (exp)
-
-
-State 3
-
-   11 exp: INT .
-
-    $default  reduce using rule 11 (exp)
-
-
-State 4
-
-   54 ifstmt: IF . exp THEN exp
-   55       | IF . exp THEN exp ELSE exp
-
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
-
-    exp          转到状态 19
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
-
-
-State 5
-
-   31 letstmt: LET . decs IN expseq END
-
-    FUNCTION  shift, and go to state 20
-    VAR       shift, and go to state 21
-    TYPE      shift, and go to state 22
-
-    $default  reduce using rule 36 (decs)
-
-    decs    转到状态 23
-    dec     转到状态 24
-    fundec  转到状态 25
-    vardec  转到状态 26
-    tydec   转到状态 27
-
-
-State 6
-
-   13 exp: NIL .
+   13 exp: STRING .
 
     $default  reduce using rule 13 (exp)
 
 
+State 3
+
+   12 exp: INT .
+
+    $default  reduce using rule 12 (exp)
+
+
+State 4
+
+   11 exp: MINUS . exp
+
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    exp          转到状态 27
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
+
+
+State 5
+
+   38 expblock: LPAREN . expseq RPAREN
+
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    $default  reduce using rule 42 (expseq)
+
+    exp          转到状态 28
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    expseq       转到状态 29
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
+
+
+State 6
+
+   62 ifstmt: IF . exp THEN exp
+   63       | IF . exp THEN exp ELSE exp
+
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    exp          转到状态 30
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
+
+
 State 7
 
-    0 $accept: program . $end
+   36 whilestmt: WHILE . exp DO exp
 
-    $end  shift, and go to state 28
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    exp          转到状态 31
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
 
 
 State 8
+
+   37 forstmt: FOR . id ASSIGN exp TO exp DO exp
+
+    ID  shift, and go to state 1
+
+    id  转到状态 32
+
+
+State 9
+
+   39 letstmt: LET . decs IN expseq END
+
+    FUNCTION  shift, and go to state 33
+    VAR       shift, and go to state 34
+    TYPE      shift, and go to state 35
+
+    $default  reduce using rule 44 (decs)
+
+    decs    转到状态 36
+    dec     转到状态 37
+    fundec  转到状态 38
+    vardec  转到状态 39
+    tydec   转到状态 40
+
+
+State 10
+
+   16 exp: BREAK .
+
+    $default  reduce using rule 16 (exp)
+
+
+State 11
+
+   14 exp: NIL .
+
+    $default  reduce using rule 14 (exp)
+
+
+State 12
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 41
+
+
+State 13
 
     1 program: exp .
     7 exp: exp . PLUS exp
     8    | exp . MINUS exp
     9    | exp . TIMES exp
    10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
 
-    AND     shift, and go to state 29
-    OR      shift, and go to state 30
-    EQ      shift, and go to state 31
-    NEQ     shift, and go to state 32
-    LT      shift, and go to state 33
-    LE      shift, and go to state 34
-    GT      shift, and go to state 35
-    GE      shift, and go to state 36
-    PLUS    shift, and go to state 37
-    MINUS   shift, and go to state 38
-    TIMES   shift, and go to state 39
-    DIVIDE  shift, and go to state 40
+    AND     shift, and go to state 42
+    OR      shift, and go to state 43
+    EQ      shift, and go to state 44
+    NEQ     shift, and go to state 45
+    LT      shift, and go to state 46
+    LE      shift, and go to state 47
+    GT      shift, and go to state 48
+    GE      shift, and go to state 49
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
 
     $default  reduce using rule 1 (program)
 
 
-State 9
+State 14
 
     6 exp: comparestmt .
 
     $default  reduce using rule 6 (exp)
 
 
-State 10
+State 15
 
     4 exp: arraydefine .
 
     $default  reduce using rule 4 (exp)
 
 
-State 11
+State 16
 
-   22 arraydefine: id . LBRACK exp RBRACK OF exp
-   24 lvalue: id .
-   42 record: id . LBRACE recordfields RBRACE
-   57 funccall: id . LPAREN args RPAREN
+   25 arraydefine: id . LBRACK exp RBRACK OF exp
+   27 lvalue: id .
+   50 record: id . LBRACE recordfields RBRACE
+   65 funccall: id . LPAREN args RPAREN
 
-    LPAREN  shift, and go to state 41
-    LBRACK  shift, and go to state 42
-    LBRACE  shift, and go to state 43
+    LPAREN  shift, and go to state 54
+    LBRACK  shift, and go to state 55
+    LBRACE  shift, and go to state 56
 
-    LBRACK    [reduce using rule 24 (lvalue)]
-    $default  reduce using rule 24 (lvalue)
+    LBRACK    [reduce using rule 27 (lvalue)]
+    $default  reduce using rule 27 (lvalue)
 
 
-State 12
+State 17
 
     2 exp: lvalue .
-   25 lvalue: lvalue . DOT id
-   26       | lvalue . LBRACK exp RBRACK
-   56 assignstmt: lvalue . ASSIGN exp
+   28 lvalue: lvalue . DOT id
+   29       | lvalue . LBRACK exp RBRACK
+   64 assignstmt: lvalue . ASSIGN exp
 
-    ASSIGN  shift, and go to state 44
-    LBRACK  shift, and go to state 45
-    DOT     shift, and go to state 46
+    ASSIGN  shift, and go to state 57
+    LBRACK  shift, and go to state 58
+    DOT     shift, and go to state 59
 
     $default  reduce using rule 2 (exp)
 
 
-State 13
+State 18
 
     3 exp: stmt .
 
     $default  reduce using rule 3 (exp)
 
 
-State 14
+State 19
 
-   30 stmt: letstmt .
+   35 stmt: whilestmt .
 
-    $default  reduce using rule 30 (stmt)
+    $default  reduce using rule 35 (stmt)
 
 
-State 15
+State 20
+
+   34 stmt: forstmt .
+
+    $default  reduce using rule 34 (stmt)
+
+
+State 21
+
+   15 exp: expblock .
+
+    $default  reduce using rule 15 (exp)
+
+
+State 22
+
+   33 stmt: letstmt .
+
+    $default  reduce using rule 33 (stmt)
+
+
+State 23
 
     5 exp: record .
 
     $default  reduce using rule 5 (exp)
 
 
-State 16
+State 24
 
-   29 stmt: ifstmt .
+   32 stmt: ifstmt .
 
-    $default  reduce using rule 29 (stmt)
-
-
-State 17
-
-   28 stmt: assignstmt .
-
-    $default  reduce using rule 28 (stmt)
+    $default  reduce using rule 32 (stmt)
 
 
-State 18
+State 25
 
-   27 stmt: funccall .
+   31 stmt: assignstmt .
 
-    $default  reduce using rule 27 (stmt)
+    $default  reduce using rule 31 (stmt)
 
 
-State 19
+State 26
+
+   30 stmt: funccall .
+
+    $default  reduce using rule 30 (stmt)
+
+
+State 27
 
     7 exp: exp . PLUS exp
     8    | exp . MINUS exp
     9    | exp . TIMES exp
    10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
-   54 ifstmt: IF exp . THEN exp
-   55       | IF exp . THEN exp ELSE exp
+   11    | MINUS exp .
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
 
-    AND     shift, and go to state 29
-    OR      shift, and go to state 30
-    EQ      shift, and go to state 31
-    NEQ     shift, and go to state 32
-    LT      shift, and go to state 33
-    LE      shift, and go to state 34
-    GT      shift, and go to state 35
-    GE      shift, and go to state 36
-    PLUS    shift, and go to state 37
-    MINUS   shift, and go to state 38
-    TIMES   shift, and go to state 39
-    DIVIDE  shift, and go to state 40
-    THEN    shift, and go to state 47
-
-
-State 20
-
-   40 fundec: FUNCTION . id LPAREN tyfields RPAREN EQ exp
-   41       | FUNCTION . id LPAREN tyfields RPAREN COLON id EQ exp
-
-    ID  shift, and go to state 1
-
-    id  转到状态 48
-
-
-State 21
-
-   45 vardec: VAR . ID ASSIGN exp
-   46       | VAR . id COLON id ASSIGN exp
-
-    ID  shift, and go to state 49
-
-    id  转到状态 50
-
-
-State 22
-
-   47 tydec: TYPE . id EQ ty
-
-    ID  shift, and go to state 1
-
-    id  转到状态 51
-
-
-State 23
-
-   31 letstmt: LET decs . IN expseq END
-
-    IN  shift, and go to state 52
-
-
-State 24
-
-   35 decs: dec . decs
-
-    FUNCTION  shift, and go to state 20
-    VAR       shift, and go to state 21
-    TYPE      shift, and go to state 22
-
-    $default  reduce using rule 36 (decs)
-
-    decs    转到状态 53
-    dec     转到状态 24
-    fundec  转到状态 25
-    vardec  转到状态 26
-    tydec   转到状态 27
-
-
-State 25
-
-   39 dec: fundec .
-
-    $default  reduce using rule 39 (dec)
-
-
-State 26
-
-   38 dec: vardec .
-
-    $default  reduce using rule 38 (dec)
-
-
-State 27
-
-   37 dec: tydec .
-
-    $default  reduce using rule 37 (dec)
+    $default  reduce using rule 11 (exp)
 
 
 State 28
+
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+   40 expseq: exp .
+   41       | exp . SEMICOLON expseq
+
+    AND        shift, and go to state 42
+    OR         shift, and go to state 43
+    EQ         shift, and go to state 44
+    NEQ        shift, and go to state 45
+    LT         shift, and go to state 46
+    LE         shift, and go to state 47
+    GT         shift, and go to state 48
+    GE         shift, and go to state 49
+    PLUS       shift, and go to state 50
+    MINUS      shift, and go to state 51
+    TIMES      shift, and go to state 52
+    DIVIDE     shift, and go to state 53
+    SEMICOLON  shift, and go to state 60
+
+    $default  reduce using rule 40 (expseq)
+
+
+State 29
+
+   38 expblock: LPAREN expseq . RPAREN
+
+    RPAREN  shift, and go to state 61
+
+
+State 30
+
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+   62 ifstmt: IF exp . THEN exp
+   63       | IF exp . THEN exp ELSE exp
+
+    AND     shift, and go to state 42
+    OR      shift, and go to state 43
+    EQ      shift, and go to state 44
+    NEQ     shift, and go to state 45
+    LT      shift, and go to state 46
+    LE      shift, and go to state 47
+    GT      shift, and go to state 48
+    GE      shift, and go to state 49
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
+    THEN    shift, and go to state 62
+
+
+State 31
+
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+   36 whilestmt: WHILE exp . DO exp
+
+    AND     shift, and go to state 42
+    OR      shift, and go to state 43
+    EQ      shift, and go to state 44
+    NEQ     shift, and go to state 45
+    LT      shift, and go to state 46
+    LE      shift, and go to state 47
+    GT      shift, and go to state 48
+    GE      shift, and go to state 49
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
+    DO      shift, and go to state 63
+
+
+State 32
+
+   37 forstmt: FOR id . ASSIGN exp TO exp DO exp
+
+    ASSIGN  shift, and go to state 64
+
+
+State 33
+
+   48 fundec: FUNCTION . id LPAREN tyfields RPAREN EQ exp
+   49       | FUNCTION . id LPAREN tyfields RPAREN COLON id EQ exp
+
+    ID  shift, and go to state 1
+
+    id  转到状态 65
+
+
+State 34
+
+   53 vardec: VAR . ID ASSIGN exp
+   54       | VAR . id COLON id ASSIGN exp
+
+    ID  shift, and go to state 66
+
+    id  转到状态 67
+
+
+State 35
+
+   55 tydec: TYPE . id EQ ty
+
+    ID  shift, and go to state 1
+
+    id  转到状态 68
+
+
+State 36
+
+   39 letstmt: LET decs . IN expseq END
+
+    IN  shift, and go to state 69
+
+
+State 37
+
+   43 decs: dec . decs
+
+    FUNCTION  shift, and go to state 33
+    VAR       shift, and go to state 34
+    TYPE      shift, and go to state 35
+
+    $default  reduce using rule 44 (decs)
+
+    decs    转到状态 70
+    dec     转到状态 37
+    fundec  转到状态 38
+    vardec  转到状态 39
+    tydec   转到状态 40
+
+
+State 38
+
+   47 dec: fundec .
+
+    $default  reduce using rule 47 (dec)
+
+
+State 39
+
+   46 dec: vardec .
+
+    $default  reduce using rule 46 (dec)
+
+
+State 40
+
+   45 dec: tydec .
+
+    $default  reduce using rule 45 (dec)
+
+
+State 41
 
     0 $accept: program $end .
 
     $default  接受
 
 
-State 29
+State 42
 
-   20 comparestmt: exp AND . exp
-
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
-
-    exp          转到状态 54
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
-
-
-State 30
-
-   21 comparestmt: exp OR . exp
+   23 comparestmt: exp AND . exp
 
     ID      shift, and go to state 1
     STRING  shift, and go to state 2
     INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    exp          转到状态 55
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
-
-
-State 31
-
-   14 comparestmt: exp EQ . exp
-
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
-
-    exp          转到状态 56
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
+    exp          转到状态 71
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
 
 
-State 32
+State 43
 
-   15 comparestmt: exp NEQ . exp
+   24 comparestmt: exp OR . exp
 
     ID      shift, and go to state 1
     STRING  shift, and go to state 2
     INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    exp          转到状态 57
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
-
-
-State 33
-
-   17 comparestmt: exp LT . exp
-
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
-
-    exp          转到状态 58
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
+    exp          转到状态 72
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
 
 
-State 34
+State 44
 
-   19 comparestmt: exp LE . exp
+   17 comparestmt: exp EQ . exp
 
     ID      shift, and go to state 1
     STRING  shift, and go to state 2
     INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    exp          转到状态 59
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
-
-
-State 35
-
-   16 comparestmt: exp GT . exp
-
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
-
-    exp          转到状态 60
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
+    exp          转到状态 73
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
 
 
-State 36
+State 45
 
-   18 comparestmt: exp GE . exp
+   18 comparestmt: exp NEQ . exp
 
     ID      shift, and go to state 1
     STRING  shift, and go to state 2
     INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    exp          转到状态 61
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
+    exp          转到状态 74
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
 
 
-State 37
+State 46
+
+   20 comparestmt: exp LT . exp
+
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    exp          转到状态 75
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
+
+
+State 47
+
+   22 comparestmt: exp LE . exp
+
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    exp          转到状态 76
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
+
+
+State 48
+
+   19 comparestmt: exp GT . exp
+
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    exp          转到状态 77
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
+
+
+State 49
+
+   21 comparestmt: exp GE . exp
+
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    exp          转到状态 78
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
+
+
+State 50
 
     7 exp: exp PLUS . exp
 
     ID      shift, and go to state 1
     STRING  shift, and go to state 2
     INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    exp          转到状态 62
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
+    exp          转到状态 79
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
 
 
-State 38
+State 51
 
     8 exp: exp MINUS . exp
 
     ID      shift, and go to state 1
     STRING  shift, and go to state 2
     INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    exp          转到状态 63
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
+    exp          转到状态 80
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
 
 
-State 39
+State 52
 
     9 exp: exp TIMES . exp
 
     ID      shift, and go to state 1
     STRING  shift, and go to state 2
     INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    exp          转到状态 64
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
+    exp          转到状态 81
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
 
 
-State 40
+State 53
 
    10 exp: exp DIVIDE . exp
 
     ID      shift, and go to state 1
     STRING  shift, and go to state 2
     INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    exp          转到状态 65
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
-
-
-State 41
-
-   57 funccall: id LPAREN . args RPAREN
-
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
-
-    exp          转到状态 66
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
-    args         转到状态 67
-
-
-State 42
-
-   22 arraydefine: id LBRACK . exp RBRACK OF exp
-
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
-
-    exp          转到状态 68
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
-
-
-State 43
-
-   42 record: id LBRACE . recordfields RBRACE
-
-    ID  shift, and go to state 1
-
-    id            转到状态 69
-    recordfields  转到状态 70
-
-
-State 44
-
-   56 assignstmt: lvalue ASSIGN . exp
-
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
-
-    exp          转到状态 71
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
-
-
-State 45
-
-   26 lvalue: lvalue LBRACK . exp RBRACK
-
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
-
-    exp          转到状态 72
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
-
-
-State 46
-
-   25 lvalue: lvalue DOT . id
-
-    ID  shift, and go to state 1
-
-    id  转到状态 73
-
-
-State 47
-
-   54 ifstmt: IF exp THEN . exp
-   55       | IF exp THEN . exp ELSE exp
-
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
-
-    exp          转到状态 74
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
-
-
-State 48
-
-   40 fundec: FUNCTION id . LPAREN tyfields RPAREN EQ exp
-   41       | FUNCTION id . LPAREN tyfields RPAREN COLON id EQ exp
-
-    LPAREN  shift, and go to state 75
-
-
-State 49
-
-   23 id: ID .
-   45 vardec: VAR ID . ASSIGN exp
-
-    ASSIGN  shift, and go to state 76
-
-    $default  reduce using rule 23 (id)
-
-
-State 50
-
-   46 vardec: VAR id . COLON id ASSIGN exp
-
-    COLON  shift, and go to state 77
-
-
-State 51
-
-   47 tydec: TYPE id . EQ ty
-
-    EQ  shift, and go to state 78
-
-
-State 52
-
-   31 letstmt: LET decs IN . expseq END
-
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
-
-    $default  reduce using rule 34 (expseq)
-
-    exp          转到状态 79
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    expseq       转到状态 80
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
-
-
-State 53
-
-   35 decs: dec decs .
-
-    $default  reduce using rule 35 (decs)
+    exp          转到状态 82
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
 
 
 State 54
 
-    7 exp: exp . PLUS exp
-    8    | exp . MINUS exp
-    9    | exp . TIMES exp
-   10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   20            | exp AND exp .
-   21            | exp . OR exp
+   65 funccall: id LPAREN . args RPAREN
 
-    EQ      shift, and go to state 31
-    NEQ     shift, and go to state 32
-    LT      shift, and go to state 33
-    LE      shift, and go to state 34
-    GT      shift, and go to state 35
-    GE      shift, and go to state 36
-    PLUS    shift, and go to state 37
-    MINUS   shift, and go to state 38
-    TIMES   shift, and go to state 39
-    DIVIDE  shift, and go to state 40
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    $default  reduce using rule 20 (comparestmt)
+    $default  reduce using rule 68 (args)
+
+    exp          转到状态 83
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
+    args         转到状态 84
 
 
 State 55
 
-    7 exp: exp . PLUS exp
-    8    | exp . MINUS exp
-    9    | exp . TIMES exp
-   10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
-   21            | exp OR exp .
+   25 arraydefine: id LBRACK . exp RBRACK OF exp
 
-    EQ      shift, and go to state 31
-    NEQ     shift, and go to state 32
-    LT      shift, and go to state 33
-    LE      shift, and go to state 34
-    GT      shift, and go to state 35
-    GE      shift, and go to state 36
-    PLUS    shift, and go to state 37
-    MINUS   shift, and go to state 38
-    TIMES   shift, and go to state 39
-    DIVIDE  shift, and go to state 40
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    $default  reduce using rule 21 (comparestmt)
+    exp          转到状态 85
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
 
 
 State 56
 
-    7 exp: exp . PLUS exp
-    8    | exp . MINUS exp
-    9    | exp . TIMES exp
-   10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   14            | exp EQ exp .
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
+   50 record: id LBRACE . recordfields RBRACE
 
-    PLUS    shift, and go to state 37
-    MINUS   shift, and go to state 38
-    TIMES   shift, and go to state 39
-    DIVIDE  shift, and go to state 40
+    ID  shift, and go to state 1
 
-    EQ   error (nonassociative)
-    NEQ  error (nonassociative)
-    LT   error (nonassociative)
-    LE   error (nonassociative)
-    GT   error (nonassociative)
-    GE   error (nonassociative)
-
-    $default  reduce using rule 14 (comparestmt)
+    id            转到状态 86
+    recordfields  转到状态 87
 
 
 State 57
 
-    7 exp: exp . PLUS exp
-    8    | exp . MINUS exp
-    9    | exp . TIMES exp
-   10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   15            | exp NEQ exp .
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
+   64 assignstmt: lvalue ASSIGN . exp
 
-    PLUS    shift, and go to state 37
-    MINUS   shift, and go to state 38
-    TIMES   shift, and go to state 39
-    DIVIDE  shift, and go to state 40
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    EQ   error (nonassociative)
-    NEQ  error (nonassociative)
-    LT   error (nonassociative)
-    LE   error (nonassociative)
-    GT   error (nonassociative)
-    GE   error (nonassociative)
-
-    $default  reduce using rule 15 (comparestmt)
+    exp          转到状态 88
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
 
 
 State 58
 
+   29 lvalue: lvalue LBRACK . exp RBRACK
+
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    exp          转到状态 89
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
+
+
+State 59
+
+   28 lvalue: lvalue DOT . id
+
+    ID  shift, and go to state 1
+
+    id  转到状态 90
+
+
+State 60
+
+   41 expseq: exp SEMICOLON . expseq
+
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    $default  reduce using rule 42 (expseq)
+
+    exp          转到状态 28
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    expseq       转到状态 91
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
+
+
+State 61
+
+   38 expblock: LPAREN expseq RPAREN .
+
+    $default  reduce using rule 38 (expblock)
+
+
+State 62
+
+   62 ifstmt: IF exp THEN . exp
+   63       | IF exp THEN . exp ELSE exp
+
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    exp          转到状态 92
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
+
+
+State 63
+
+   36 whilestmt: WHILE exp DO . exp
+
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    exp          转到状态 93
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
+
+
+State 64
+
+   37 forstmt: FOR id ASSIGN . exp TO exp DO exp
+
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    exp          转到状态 94
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
+
+
+State 65
+
+   48 fundec: FUNCTION id . LPAREN tyfields RPAREN EQ exp
+   49       | FUNCTION id . LPAREN tyfields RPAREN COLON id EQ exp
+
+    LPAREN  shift, and go to state 95
+
+
+State 66
+
+   26 id: ID .
+   53 vardec: VAR ID . ASSIGN exp
+
+    ASSIGN  shift, and go to state 96
+
+    $default  reduce using rule 26 (id)
+
+
+State 67
+
+   54 vardec: VAR id . COLON id ASSIGN exp
+
+    COLON  shift, and go to state 97
+
+
+State 68
+
+   55 tydec: TYPE id . EQ ty
+
+    EQ  shift, and go to state 98
+
+
+State 69
+
+   39 letstmt: LET decs IN . expseq END
+
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    $default  reduce using rule 42 (expseq)
+
+    exp          转到状态 28
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    expseq       转到状态 99
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
+
+
+State 70
+
+   43 decs: dec decs .
+
+    $default  reduce using rule 43 (decs)
+
+
+State 71
+
     7 exp: exp . PLUS exp
     8    | exp . MINUS exp
     9    | exp . TIMES exp
    10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   17            | exp LT exp .
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   23            | exp AND exp .
+   24            | exp . OR exp
 
-    PLUS    shift, and go to state 37
-    MINUS   shift, and go to state 38
-    TIMES   shift, and go to state 39
-    DIVIDE  shift, and go to state 40
+    EQ      shift, and go to state 44
+    NEQ     shift, and go to state 45
+    LT      shift, and go to state 46
+    LE      shift, and go to state 47
+    GT      shift, and go to state 48
+    GE      shift, and go to state 49
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
+
+    $default  reduce using rule 23 (comparestmt)
+
+
+State 72
+
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+   24            | exp OR exp .
+
+    EQ      shift, and go to state 44
+    NEQ     shift, and go to state 45
+    LT      shift, and go to state 46
+    LE      shift, and go to state 47
+    GT      shift, and go to state 48
+    GE      shift, and go to state 49
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
+
+    $default  reduce using rule 24 (comparestmt)
+
+
+State 73
+
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   17            | exp EQ exp .
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
 
     EQ   error (nonassociative)
     NEQ  error (nonassociative)
@@ -1180,88 +1629,26 @@ State 58
     $default  reduce using rule 17 (comparestmt)
 
 
-State 59
+State 74
 
     7 exp: exp . PLUS exp
     8    | exp . MINUS exp
     9    | exp . TIMES exp
    10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   19            | exp LE exp .
-   20            | exp . AND exp
-   21            | exp . OR exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   18            | exp NEQ exp .
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
 
-    PLUS    shift, and go to state 37
-    MINUS   shift, and go to state 38
-    TIMES   shift, and go to state 39
-    DIVIDE  shift, and go to state 40
-
-    EQ   error (nonassociative)
-    NEQ  error (nonassociative)
-    LT   error (nonassociative)
-    LE   error (nonassociative)
-    GT   error (nonassociative)
-    GE   error (nonassociative)
-
-    $default  reduce using rule 19 (comparestmt)
-
-
-State 60
-
-    7 exp: exp . PLUS exp
-    8    | exp . MINUS exp
-    9    | exp . TIMES exp
-   10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   16            | exp GT exp .
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
-
-    PLUS    shift, and go to state 37
-    MINUS   shift, and go to state 38
-    TIMES   shift, and go to state 39
-    DIVIDE  shift, and go to state 40
-
-    EQ   error (nonassociative)
-    NEQ  error (nonassociative)
-    LT   error (nonassociative)
-    LE   error (nonassociative)
-    GT   error (nonassociative)
-    GE   error (nonassociative)
-
-    $default  reduce using rule 16 (comparestmt)
-
-
-State 61
-
-    7 exp: exp . PLUS exp
-    8    | exp . MINUS exp
-    9    | exp . TIMES exp
-   10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   18            | exp GE exp .
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
-
-    PLUS    shift, and go to state 37
-    MINUS   shift, and go to state 38
-    TIMES   shift, and go to state 39
-    DIVIDE  shift, and go to state 40
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
 
     EQ   error (nonassociative)
     NEQ  error (nonassociative)
@@ -1273,974 +1660,1267 @@ State 61
     $default  reduce using rule 18 (comparestmt)
 
 
-State 62
+State 75
+
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   20            | exp LT exp .
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
+
+    EQ   error (nonassociative)
+    NEQ  error (nonassociative)
+    LT   error (nonassociative)
+    LE   error (nonassociative)
+    GT   error (nonassociative)
+    GE   error (nonassociative)
+
+    $default  reduce using rule 20 (comparestmt)
+
+
+State 76
+
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   22            | exp LE exp .
+   23            | exp . AND exp
+   24            | exp . OR exp
+
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
+
+    EQ   error (nonassociative)
+    NEQ  error (nonassociative)
+    LT   error (nonassociative)
+    LE   error (nonassociative)
+    GT   error (nonassociative)
+    GE   error (nonassociative)
+
+    $default  reduce using rule 22 (comparestmt)
+
+
+State 77
+
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   19            | exp GT exp .
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
+
+    EQ   error (nonassociative)
+    NEQ  error (nonassociative)
+    LT   error (nonassociative)
+    LE   error (nonassociative)
+    GT   error (nonassociative)
+    GE   error (nonassociative)
+
+    $default  reduce using rule 19 (comparestmt)
+
+
+State 78
+
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   21            | exp GE exp .
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
+
+    EQ   error (nonassociative)
+    NEQ  error (nonassociative)
+    LT   error (nonassociative)
+    LE   error (nonassociative)
+    GT   error (nonassociative)
+    GE   error (nonassociative)
+
+    $default  reduce using rule 21 (comparestmt)
+
+
+State 79
 
     7 exp: exp . PLUS exp
     7    | exp PLUS exp .
     8    | exp . MINUS exp
     9    | exp . TIMES exp
    10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
 
-    TIMES   shift, and go to state 39
-    DIVIDE  shift, and go to state 40
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
 
     $default  reduce using rule 7 (exp)
 
 
-State 63
+State 80
 
     7 exp: exp . PLUS exp
     8    | exp . MINUS exp
     8    | exp MINUS exp .
     9    | exp . TIMES exp
    10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
 
-    TIMES   shift, and go to state 39
-    DIVIDE  shift, and go to state 40
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
 
     $default  reduce using rule 8 (exp)
 
 
-State 64
+State 81
 
     7 exp: exp . PLUS exp
     8    | exp . MINUS exp
     9    | exp . TIMES exp
     9    | exp TIMES exp .
    10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
 
     $default  reduce using rule 9 (exp)
 
 
-State 65
+State 82
 
     7 exp: exp . PLUS exp
     8    | exp . MINUS exp
     9    | exp . TIMES exp
    10    | exp . DIVIDE exp
    10    | exp DIVIDE exp .
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
 
     $default  reduce using rule 10 (exp)
 
 
-State 66
-
-    7 exp: exp . PLUS exp
-    8    | exp . MINUS exp
-    9    | exp . TIMES exp
-   10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
-   58 args: exp . COMMA args
-   59     | exp .
-
-    AND     shift, and go to state 29
-    OR      shift, and go to state 30
-    EQ      shift, and go to state 31
-    NEQ     shift, and go to state 32
-    LT      shift, and go to state 33
-    LE      shift, and go to state 34
-    GT      shift, and go to state 35
-    GE      shift, and go to state 36
-    PLUS    shift, and go to state 37
-    MINUS   shift, and go to state 38
-    TIMES   shift, and go to state 39
-    DIVIDE  shift, and go to state 40
-    COMMA   shift, and go to state 81
-
-    $default  reduce using rule 59 (args)
-
-
-State 67
-
-   57 funccall: id LPAREN args . RPAREN
-
-    RPAREN  shift, and go to state 82
-
-
-State 68
-
-    7 exp: exp . PLUS exp
-    8    | exp . MINUS exp
-    9    | exp . TIMES exp
-   10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
-   22 arraydefine: id LBRACK exp . RBRACK OF exp
-
-    AND     shift, and go to state 29
-    OR      shift, and go to state 30
-    EQ      shift, and go to state 31
-    NEQ     shift, and go to state 32
-    LT      shift, and go to state 33
-    LE      shift, and go to state 34
-    GT      shift, and go to state 35
-    GE      shift, and go to state 36
-    PLUS    shift, and go to state 37
-    MINUS   shift, and go to state 38
-    TIMES   shift, and go to state 39
-    DIVIDE  shift, and go to state 40
-    RBRACK  shift, and go to state 83
-
-
-State 69
-
-   43 recordfields: id . EQ exp
-   44             | id . EQ exp COMMA recordfields
-
-    EQ  shift, and go to state 84
-
-
-State 70
-
-   42 record: id LBRACE recordfields . RBRACE
-
-    RBRACE  shift, and go to state 85
-
-
-State 71
-
-    7 exp: exp . PLUS exp
-    8    | exp . MINUS exp
-    9    | exp . TIMES exp
-   10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
-   56 assignstmt: lvalue ASSIGN exp .
-
-    AND     shift, and go to state 29
-    OR      shift, and go to state 30
-    EQ      shift, and go to state 31
-    NEQ     shift, and go to state 32
-    LT      shift, and go to state 33
-    LE      shift, and go to state 34
-    GT      shift, and go to state 35
-    GE      shift, and go to state 36
-    PLUS    shift, and go to state 37
-    MINUS   shift, and go to state 38
-    TIMES   shift, and go to state 39
-    DIVIDE  shift, and go to state 40
-
-    $default  reduce using rule 56 (assignstmt)
-
-
-State 72
-
-    7 exp: exp . PLUS exp
-    8    | exp . MINUS exp
-    9    | exp . TIMES exp
-   10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
-   26 lvalue: lvalue LBRACK exp . RBRACK
-
-    AND     shift, and go to state 29
-    OR      shift, and go to state 30
-    EQ      shift, and go to state 31
-    NEQ     shift, and go to state 32
-    LT      shift, and go to state 33
-    LE      shift, and go to state 34
-    GT      shift, and go to state 35
-    GE      shift, and go to state 36
-    PLUS    shift, and go to state 37
-    MINUS   shift, and go to state 38
-    TIMES   shift, and go to state 39
-    DIVIDE  shift, and go to state 40
-    RBRACK  shift, and go to state 86
-
-
-State 73
-
-   25 lvalue: lvalue DOT id .
-
-    $default  reduce using rule 25 (lvalue)
-
-
-State 74
-
-    7 exp: exp . PLUS exp
-    8    | exp . MINUS exp
-    9    | exp . TIMES exp
-   10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
-   54 ifstmt: IF exp THEN exp .
-   55       | IF exp THEN exp . ELSE exp
-
-    ELSE  shift, and go to state 87
-
-    $default  reduce using rule 54 (ifstmt)
-
-
-State 75
-
-   40 fundec: FUNCTION id LPAREN . tyfields RPAREN EQ exp
-   41       | FUNCTION id LPAREN . tyfields RPAREN COLON id EQ exp
-
-    ID  shift, and go to state 1
-
-    $default  reduce using rule 51 (tyfields)
-
-    id        转到状态 88
-    tyfields  转到状态 89
-
-
-State 76
-
-   45 vardec: VAR ID ASSIGN . exp
-
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
-
-    exp          转到状态 90
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
-
-
-State 77
-
-   46 vardec: VAR id COLON . id ASSIGN exp
-
-    ID  shift, and go to state 1
-
-    id  转到状态 91
-
-
-State 78
-
-   47 tydec: TYPE id EQ . ty
-
-    ID      shift, and go to state 1
-    LBRACE  shift, and go to state 92
-    ARRAY   shift, and go to state 93
-
-    id  转到状态 94
-    ty  转到状态 95
-
-
-State 79
-
-    7 exp: exp . PLUS exp
-    8    | exp . MINUS exp
-    9    | exp . TIMES exp
-   10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
-   32 expseq: exp .
-   33       | exp . SEMICOLON expseq
-
-    AND        shift, and go to state 29
-    OR         shift, and go to state 30
-    EQ         shift, and go to state 31
-    NEQ        shift, and go to state 32
-    LT         shift, and go to state 33
-    LE         shift, and go to state 34
-    GT         shift, and go to state 35
-    GE         shift, and go to state 36
-    PLUS       shift, and go to state 37
-    MINUS      shift, and go to state 38
-    TIMES      shift, and go to state 39
-    DIVIDE     shift, and go to state 40
-    SEMICOLON  shift, and go to state 96
-
-    $default  reduce using rule 32 (expseq)
-
-
-State 80
-
-   31 letstmt: LET decs IN expseq . END
-
-    END  shift, and go to state 97
-
-
-State 81
-
-   58 args: exp COMMA . args
-
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
-
-    exp          转到状态 66
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
-    args         转到状态 98
-
-
-State 82
-
-   57 funccall: id LPAREN args RPAREN .
-
-    $default  reduce using rule 57 (funccall)
-
-
 State 83
 
-   22 arraydefine: id LBRACK exp RBRACK . OF exp
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+   66 args: exp . COMMA args
+   67     | exp .
 
-    OF  shift, and go to state 99
+    AND     shift, and go to state 42
+    OR      shift, and go to state 43
+    EQ      shift, and go to state 44
+    NEQ     shift, and go to state 45
+    LT      shift, and go to state 46
+    LE      shift, and go to state 47
+    GT      shift, and go to state 48
+    GE      shift, and go to state 49
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
+    COMMA   shift, and go to state 100
+
+    $default  reduce using rule 67 (args)
 
 
 State 84
 
-   43 recordfields: id EQ . exp
-   44             | id EQ . exp COMMA recordfields
+   65 funccall: id LPAREN args . RPAREN
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
-
-    exp          转到状态 100
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
+    RPAREN  shift, and go to state 101
 
 
 State 85
 
-   42 record: id LBRACE recordfields RBRACE .
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+   25 arraydefine: id LBRACK exp . RBRACK OF exp
 
-    $default  reduce using rule 42 (record)
+    AND     shift, and go to state 42
+    OR      shift, and go to state 43
+    EQ      shift, and go to state 44
+    NEQ     shift, and go to state 45
+    LT      shift, and go to state 46
+    LE      shift, and go to state 47
+    GT      shift, and go to state 48
+    GE      shift, and go to state 49
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
+    RBRACK  shift, and go to state 102
 
 
 State 86
 
-   26 lvalue: lvalue LBRACK exp RBRACK .
+   51 recordfields: id . EQ exp
+   52             | id . EQ exp COMMA recordfields
 
-    $default  reduce using rule 26 (lvalue)
+    EQ  shift, and go to state 103
 
 
 State 87
 
-   55 ifstmt: IF exp THEN exp ELSE . exp
+   50 record: id LBRACE recordfields . RBRACE
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
-
-    exp          转到状态 101
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
+    RBRACE  shift, and go to state 104
 
 
 State 88
 
-   52 tyfields: id . COLON id
-   53         | id . COLON id COMMA tyfields
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+   64 assignstmt: lvalue ASSIGN exp .
 
-    COLON  shift, and go to state 102
+    AND     shift, and go to state 42
+    OR      shift, and go to state 43
+    EQ      shift, and go to state 44
+    NEQ     shift, and go to state 45
+    LT      shift, and go to state 46
+    LE      shift, and go to state 47
+    GT      shift, and go to state 48
+    GE      shift, and go to state 49
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
+
+    $default  reduce using rule 64 (assignstmt)
 
 
 State 89
 
-   40 fundec: FUNCTION id LPAREN tyfields . RPAREN EQ exp
-   41       | FUNCTION id LPAREN tyfields . RPAREN COLON id EQ exp
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+   29 lvalue: lvalue LBRACK exp . RBRACK
 
-    RPAREN  shift, and go to state 103
+    AND     shift, and go to state 42
+    OR      shift, and go to state 43
+    EQ      shift, and go to state 44
+    NEQ     shift, and go to state 45
+    LT      shift, and go to state 46
+    LE      shift, and go to state 47
+    GT      shift, and go to state 48
+    GE      shift, and go to state 49
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
+    RBRACK  shift, and go to state 105
 
 
 State 90
 
-    7 exp: exp . PLUS exp
-    8    | exp . MINUS exp
-    9    | exp . TIMES exp
-   10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
-   45 vardec: VAR ID ASSIGN exp .
+   28 lvalue: lvalue DOT id .
 
-    AND     shift, and go to state 29
-    OR      shift, and go to state 30
-    EQ      shift, and go to state 31
-    NEQ     shift, and go to state 32
-    LT      shift, and go to state 33
-    LE      shift, and go to state 34
-    GT      shift, and go to state 35
-    GE      shift, and go to state 36
-    PLUS    shift, and go to state 37
-    MINUS   shift, and go to state 38
-    TIMES   shift, and go to state 39
-    DIVIDE  shift, and go to state 40
-
-    $default  reduce using rule 45 (vardec)
+    $default  reduce using rule 28 (lvalue)
 
 
 State 91
 
-   46 vardec: VAR id COLON id . ASSIGN exp
+   41 expseq: exp SEMICOLON expseq .
 
-    ASSIGN  shift, and go to state 104
+    $default  reduce using rule 41 (expseq)
 
 
 State 92
 
-   49 ty: LBRACE . tyfields RBRACE
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+   62 ifstmt: IF exp THEN exp .
+   63       | IF exp THEN exp . ELSE exp
 
-    ID  shift, and go to state 1
+    ELSE  shift, and go to state 106
 
-    $default  reduce using rule 51 (tyfields)
-
-    id        转到状态 88
-    tyfields  转到状态 105
+    $default  reduce using rule 62 (ifstmt)
 
 
 State 93
 
-   50 ty: ARRAY . OF id
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+   36 whilestmt: WHILE exp DO exp .
 
-    OF  shift, and go to state 106
+    $default  reduce using rule 36 (whilestmt)
 
 
 State 94
 
-   48 ty: id .
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+   37 forstmt: FOR id ASSIGN exp . TO exp DO exp
 
-    $default  reduce using rule 48 (ty)
+    AND     shift, and go to state 42
+    OR      shift, and go to state 43
+    EQ      shift, and go to state 44
+    NEQ     shift, and go to state 45
+    LT      shift, and go to state 46
+    LE      shift, and go to state 47
+    GT      shift, and go to state 48
+    GE      shift, and go to state 49
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
+    TO      shift, and go to state 107
 
 
 State 95
 
-   47 tydec: TYPE id EQ ty .
+   48 fundec: FUNCTION id LPAREN . tyfields RPAREN EQ exp
+   49       | FUNCTION id LPAREN . tyfields RPAREN COLON id EQ exp
 
-    $default  reduce using rule 47 (tydec)
+    ID  shift, and go to state 1
+
+    $default  reduce using rule 59 (tyfields)
+
+    id        转到状态 108
+    tyfields  转到状态 109
 
 
 State 96
 
-   33 expseq: exp SEMICOLON . expseq
+   53 vardec: VAR ID ASSIGN . exp
 
     ID      shift, and go to state 1
     STRING  shift, and go to state 2
     INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    $default  reduce using rule 34 (expseq)
-
-    exp          转到状态 79
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    expseq       转到状态 107
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
+    exp          转到状态 110
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
 
 
 State 97
 
-   31 letstmt: LET decs IN expseq END .
+   54 vardec: VAR id COLON . id ASSIGN exp
 
-    $default  reduce using rule 31 (letstmt)
+    ID  shift, and go to state 1
+
+    id  转到状态 111
 
 
 State 98
 
-   58 args: exp COMMA args .
+   55 tydec: TYPE id EQ . ty
 
-    $default  reduce using rule 58 (args)
+    ID      shift, and go to state 1
+    LBRACE  shift, and go to state 112
+    ARRAY   shift, and go to state 113
+
+    id  转到状态 114
+    ty  转到状态 115
 
 
 State 99
 
-   22 arraydefine: id LBRACK exp RBRACK OF . exp
+   39 letstmt: LET decs IN expseq . END
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
-
-    exp          转到状态 108
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
+    END  shift, and go to state 116
 
 
 State 100
 
-    7 exp: exp . PLUS exp
-    8    | exp . MINUS exp
-    9    | exp . TIMES exp
-   10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
-   43 recordfields: id EQ exp .
-   44             | id EQ exp . COMMA recordfields
+   66 args: exp COMMA . args
 
-    AND     shift, and go to state 29
-    OR      shift, and go to state 30
-    EQ      shift, and go to state 31
-    NEQ     shift, and go to state 32
-    LT      shift, and go to state 33
-    LE      shift, and go to state 34
-    GT      shift, and go to state 35
-    GE      shift, and go to state 36
-    PLUS    shift, and go to state 37
-    MINUS   shift, and go to state 38
-    TIMES   shift, and go to state 39
-    DIVIDE  shift, and go to state 40
-    COMMA   shift, and go to state 109
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    $default  reduce using rule 43 (recordfields)
+    $default  reduce using rule 68 (args)
+
+    exp          转到状态 83
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
+    args         转到状态 117
 
 
 State 101
 
-    7 exp: exp . PLUS exp
-    8    | exp . MINUS exp
-    9    | exp . TIMES exp
-   10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
-   55 ifstmt: IF exp THEN exp ELSE exp .
+   65 funccall: id LPAREN args RPAREN .
 
-    $default  reduce using rule 55 (ifstmt)
+    $default  reduce using rule 65 (funccall)
 
 
 State 102
 
-   52 tyfields: id COLON . id
-   53         | id COLON . id COMMA tyfields
+   25 arraydefine: id LBRACK exp RBRACK . OF exp
 
-    ID  shift, and go to state 1
-
-    id  转到状态 110
+    OF  shift, and go to state 118
 
 
 State 103
 
-   40 fundec: FUNCTION id LPAREN tyfields RPAREN . EQ exp
-   41       | FUNCTION id LPAREN tyfields RPAREN . COLON id EQ exp
+   51 recordfields: id EQ . exp
+   52             | id EQ . exp COMMA recordfields
 
-    EQ     shift, and go to state 111
-    COLON  shift, and go to state 112
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    exp          转到状态 119
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
 
 
 State 104
 
-   46 vardec: VAR id COLON id ASSIGN . exp
+   50 record: id LBRACE recordfields RBRACE .
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
-
-    exp          转到状态 113
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
+    $default  reduce using rule 50 (record)
 
 
 State 105
 
-   49 ty: LBRACE tyfields . RBRACE
+   29 lvalue: lvalue LBRACK exp RBRACK .
 
-    RBRACE  shift, and go to state 114
+    $default  reduce using rule 29 (lvalue)
 
 
 State 106
 
-   50 ty: ARRAY OF . id
+   63 ifstmt: IF exp THEN exp ELSE . exp
 
-    ID  shift, and go to state 1
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    id  转到状态 115
+    exp          转到状态 120
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
 
 
 State 107
 
-   33 expseq: exp SEMICOLON expseq .
+   37 forstmt: FOR id ASSIGN exp TO . exp DO exp
 
-    $default  reduce using rule 33 (expseq)
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    exp          转到状态 121
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
 
 
 State 108
 
-    7 exp: exp . PLUS exp
-    8    | exp . MINUS exp
-    9    | exp . TIMES exp
-   10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
-   22 arraydefine: id LBRACK exp RBRACK OF exp .
+   60 tyfields: id . COLON id
+   61         | id . COLON id COMMA tyfields
 
-    $default  reduce using rule 22 (arraydefine)
+    COLON  shift, and go to state 122
 
 
 State 109
 
-   44 recordfields: id EQ exp COMMA . recordfields
+   48 fundec: FUNCTION id LPAREN tyfields . RPAREN EQ exp
+   49       | FUNCTION id LPAREN tyfields . RPAREN COLON id EQ exp
 
-    ID  shift, and go to state 1
-
-    id            转到状态 69
-    recordfields  转到状态 116
+    RPAREN  shift, and go to state 123
 
 
 State 110
 
-   52 tyfields: id COLON id .
-   53         | id COLON id . COMMA tyfields
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+   53 vardec: VAR ID ASSIGN exp .
 
-    COMMA  shift, and go to state 117
+    AND     shift, and go to state 42
+    OR      shift, and go to state 43
+    EQ      shift, and go to state 44
+    NEQ     shift, and go to state 45
+    LT      shift, and go to state 46
+    LE      shift, and go to state 47
+    GT      shift, and go to state 48
+    GE      shift, and go to state 49
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
 
-    $default  reduce using rule 52 (tyfields)
+    $default  reduce using rule 53 (vardec)
 
 
 State 111
 
-   40 fundec: FUNCTION id LPAREN tyfields RPAREN EQ . exp
+   54 vardec: VAR id COLON id . ASSIGN exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
-
-    exp          转到状态 118
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
+    ASSIGN  shift, and go to state 124
 
 
 State 112
 
-   41 fundec: FUNCTION id LPAREN tyfields RPAREN COLON . id EQ exp
+   57 ty: LBRACE . tyfields RBRACE
 
     ID  shift, and go to state 1
 
-    id  转到状态 119
+    $default  reduce using rule 59 (tyfields)
+
+    id        转到状态 108
+    tyfields  转到状态 125
 
 
 State 113
 
-    7 exp: exp . PLUS exp
-    8    | exp . MINUS exp
-    9    | exp . TIMES exp
-   10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
-   46 vardec: VAR id COLON id ASSIGN exp .
+   58 ty: ARRAY . OF id
 
-    AND     shift, and go to state 29
-    OR      shift, and go to state 30
-    EQ      shift, and go to state 31
-    NEQ     shift, and go to state 32
-    LT      shift, and go to state 33
-    LE      shift, and go to state 34
-    GT      shift, and go to state 35
-    GE      shift, and go to state 36
-    PLUS    shift, and go to state 37
-    MINUS   shift, and go to state 38
-    TIMES   shift, and go to state 39
-    DIVIDE  shift, and go to state 40
-
-    $default  reduce using rule 46 (vardec)
+    OF  shift, and go to state 126
 
 
 State 114
 
-   49 ty: LBRACE tyfields RBRACE .
+   56 ty: id .
 
-    $default  reduce using rule 49 (ty)
+    $default  reduce using rule 56 (ty)
 
 
 State 115
 
-   50 ty: ARRAY OF id .
+   55 tydec: TYPE id EQ ty .
 
-    $default  reduce using rule 50 (ty)
+    $default  reduce using rule 55 (tydec)
 
 
 State 116
 
-   44 recordfields: id EQ exp COMMA recordfields .
+   39 letstmt: LET decs IN expseq END .
 
-    $default  reduce using rule 44 (recordfields)
+    $default  reduce using rule 39 (letstmt)
 
 
 State 117
 
-   53 tyfields: id COLON id COMMA . tyfields
+   66 args: exp COMMA args .
 
-    ID  shift, and go to state 1
-
-    $default  reduce using rule 51 (tyfields)
-
-    id        转到状态 88
-    tyfields  转到状态 120
+    $default  reduce using rule 66 (args)
 
 
 State 118
 
-    7 exp: exp . PLUS exp
-    8    | exp . MINUS exp
-    9    | exp . TIMES exp
-   10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
-   40 fundec: FUNCTION id LPAREN tyfields RPAREN EQ exp .
-
-    AND     shift, and go to state 29
-    OR      shift, and go to state 30
-    EQ      shift, and go to state 31
-    NEQ     shift, and go to state 32
-    LT      shift, and go to state 33
-    LE      shift, and go to state 34
-    GT      shift, and go to state 35
-    GE      shift, and go to state 36
-    PLUS    shift, and go to state 37
-    MINUS   shift, and go to state 38
-    TIMES   shift, and go to state 39
-    DIVIDE  shift, and go to state 40
-
-    $default  reduce using rule 40 (fundec)
-
-
-State 119
-
-   41 fundec: FUNCTION id LPAREN tyfields RPAREN COLON id . EQ exp
-
-    EQ  shift, and go to state 121
-
-
-State 120
-
-   53 tyfields: id COLON id COMMA tyfields .
-
-    $default  reduce using rule 53 (tyfields)
-
-
-State 121
-
-   41 fundec: FUNCTION id LPAREN tyfields RPAREN COLON id EQ . exp
+   25 arraydefine: id LBRACK exp RBRACK OF . exp
 
     ID      shift, and go to state 1
     STRING  shift, and go to state 2
     INT     shift, and go to state 3
-    IF      shift, and go to state 4
-    LET     shift, and go to state 5
-    NIL     shift, and go to state 6
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    exp          转到状态 122
-    comparestmt  转到状态 9
-    arraydefine  转到状态 10
-    id           转到状态 11
-    lvalue       转到状态 12
-    stmt         转到状态 13
-    letstmt      转到状态 14
-    record       转到状态 15
-    ifstmt       转到状态 16
-    assignstmt   转到状态 17
-    funccall     转到状态 18
+    exp          转到状态 127
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
 
 
-State 122
+State 119
 
     7 exp: exp . PLUS exp
     8    | exp . MINUS exp
     9    | exp . TIMES exp
    10    | exp . DIVIDE exp
-   14 comparestmt: exp . EQ exp
-   15            | exp . NEQ exp
-   16            | exp . GT exp
-   17            | exp . LT exp
-   18            | exp . GE exp
-   19            | exp . LE exp
-   20            | exp . AND exp
-   21            | exp . OR exp
-   41 fundec: FUNCTION id LPAREN tyfields RPAREN COLON id EQ exp .
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+   51 recordfields: id EQ exp .
+   52             | id EQ exp . COMMA recordfields
 
-    AND     shift, and go to state 29
-    OR      shift, and go to state 30
-    EQ      shift, and go to state 31
-    NEQ     shift, and go to state 32
-    LT      shift, and go to state 33
-    LE      shift, and go to state 34
-    GT      shift, and go to state 35
-    GE      shift, and go to state 36
-    PLUS    shift, and go to state 37
-    MINUS   shift, and go to state 38
-    TIMES   shift, and go to state 39
-    DIVIDE  shift, and go to state 40
+    AND     shift, and go to state 42
+    OR      shift, and go to state 43
+    EQ      shift, and go to state 44
+    NEQ     shift, and go to state 45
+    LT      shift, and go to state 46
+    LE      shift, and go to state 47
+    GT      shift, and go to state 48
+    GE      shift, and go to state 49
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
+    COMMA   shift, and go to state 128
 
-    $default  reduce using rule 41 (fundec)
+    $default  reduce using rule 51 (recordfields)
+
+
+State 120
+
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+   63 ifstmt: IF exp THEN exp ELSE exp .
+
+    $default  reduce using rule 63 (ifstmt)
+
+
+State 121
+
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+   37 forstmt: FOR id ASSIGN exp TO exp . DO exp
+
+    AND     shift, and go to state 42
+    OR      shift, and go to state 43
+    EQ      shift, and go to state 44
+    NEQ     shift, and go to state 45
+    LT      shift, and go to state 46
+    LE      shift, and go to state 47
+    GT      shift, and go to state 48
+    GE      shift, and go to state 49
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
+    DO      shift, and go to state 129
+
+
+State 122
+
+   60 tyfields: id COLON . id
+   61         | id COLON . id COMMA tyfields
+
+    ID  shift, and go to state 1
+
+    id  转到状态 130
+
+
+State 123
+
+   48 fundec: FUNCTION id LPAREN tyfields RPAREN . EQ exp
+   49       | FUNCTION id LPAREN tyfields RPAREN . COLON id EQ exp
+
+    EQ     shift, and go to state 131
+    COLON  shift, and go to state 132
+
+
+State 124
+
+   54 vardec: VAR id COLON id ASSIGN . exp
+
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    exp          转到状态 133
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
+
+
+State 125
+
+   57 ty: LBRACE tyfields . RBRACE
+
+    RBRACE  shift, and go to state 134
+
+
+State 126
+
+   58 ty: ARRAY OF . id
+
+    ID  shift, and go to state 1
+
+    id  转到状态 135
+
+
+State 127
+
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+   25 arraydefine: id LBRACK exp RBRACK OF exp .
+
+    $default  reduce using rule 25 (arraydefine)
+
+
+State 128
+
+   52 recordfields: id EQ exp COMMA . recordfields
+
+    ID  shift, and go to state 1
+
+    id            转到状态 86
+    recordfields  转到状态 136
+
+
+State 129
+
+   37 forstmt: FOR id ASSIGN exp TO exp DO . exp
+
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    exp          转到状态 137
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
+
+
+State 130
+
+   60 tyfields: id COLON id .
+   61         | id COLON id . COMMA tyfields
+
+    COMMA  shift, and go to state 138
+
+    $default  reduce using rule 60 (tyfields)
+
+
+State 131
+
+   48 fundec: FUNCTION id LPAREN tyfields RPAREN EQ . exp
+
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    exp          转到状态 139
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
+
+
+State 132
+
+   49 fundec: FUNCTION id LPAREN tyfields RPAREN COLON . id EQ exp
+
+    ID  shift, and go to state 1
+
+    id  转到状态 140
+
+
+State 133
+
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+   54 vardec: VAR id COLON id ASSIGN exp .
+
+    AND     shift, and go to state 42
+    OR      shift, and go to state 43
+    EQ      shift, and go to state 44
+    NEQ     shift, and go to state 45
+    LT      shift, and go to state 46
+    LE      shift, and go to state 47
+    GT      shift, and go to state 48
+    GE      shift, and go to state 49
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
+
+    $default  reduce using rule 54 (vardec)
+
+
+State 134
+
+   57 ty: LBRACE tyfields RBRACE .
+
+    $default  reduce using rule 57 (ty)
+
+
+State 135
+
+   58 ty: ARRAY OF id .
+
+    $default  reduce using rule 58 (ty)
+
+
+State 136
+
+   52 recordfields: id EQ exp COMMA recordfields .
+
+    $default  reduce using rule 52 (recordfields)
+
+
+State 137
+
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+   37 forstmt: FOR id ASSIGN exp TO exp DO exp .
+
+    $default  reduce using rule 37 (forstmt)
+
+
+State 138
+
+   61 tyfields: id COLON id COMMA . tyfields
+
+    ID  shift, and go to state 1
+
+    $default  reduce using rule 59 (tyfields)
+
+    id        转到状态 108
+    tyfields  转到状态 141
+
+
+State 139
+
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+   48 fundec: FUNCTION id LPAREN tyfields RPAREN EQ exp .
+
+    AND     shift, and go to state 42
+    OR      shift, and go to state 43
+    EQ      shift, and go to state 44
+    NEQ     shift, and go to state 45
+    LT      shift, and go to state 46
+    LE      shift, and go to state 47
+    GT      shift, and go to state 48
+    GE      shift, and go to state 49
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
+
+    $default  reduce using rule 48 (fundec)
+
+
+State 140
+
+   49 fundec: FUNCTION id LPAREN tyfields RPAREN COLON id . EQ exp
+
+    EQ  shift, and go to state 142
+
+
+State 141
+
+   61 tyfields: id COLON id COMMA tyfields .
+
+    $default  reduce using rule 61 (tyfields)
+
+
+State 142
+
+   49 fundec: FUNCTION id LPAREN tyfields RPAREN COLON id EQ . exp
+
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    MINUS   shift, and go to state 4
+    LPAREN  shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    exp          转到状态 143
+    comparestmt  转到状态 14
+    arraydefine  转到状态 15
+    id           转到状态 16
+    lvalue       转到状态 17
+    stmt         转到状态 18
+    whilestmt    转到状态 19
+    forstmt      转到状态 20
+    expblock     转到状态 21
+    letstmt      转到状态 22
+    record       转到状态 23
+    ifstmt       转到状态 24
+    assignstmt   转到状态 25
+    funccall     转到状态 26
+
+
+State 143
+
+    7 exp: exp . PLUS exp
+    8    | exp . MINUS exp
+    9    | exp . TIMES exp
+   10    | exp . DIVIDE exp
+   17 comparestmt: exp . EQ exp
+   18            | exp . NEQ exp
+   19            | exp . GT exp
+   20            | exp . LT exp
+   21            | exp . GE exp
+   22            | exp . LE exp
+   23            | exp . AND exp
+   24            | exp . OR exp
+   49 fundec: FUNCTION id LPAREN tyfields RPAREN COLON id EQ exp .
+
+    AND     shift, and go to state 42
+    OR      shift, and go to state 43
+    EQ      shift, and go to state 44
+    NEQ     shift, and go to state 45
+    LT      shift, and go to state 46
+    LE      shift, and go to state 47
+    GT      shift, and go to state 48
+    GE      shift, and go to state 49
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
+
+    $default  reduce using rule 49 (fundec)

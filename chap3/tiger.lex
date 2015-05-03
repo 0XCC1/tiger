@@ -97,7 +97,7 @@ newline (\r\n|\n)
 "."						{adjust(); return DOT;}
 "/"						{adjust(); return DIVIDE;}
 "*"						{adjust(); return TIMES;}
-"="						{adjust(); return EQ;}
+"="						{adjust(); printf("assign\n"); return EQ;}
 "<>"					{adjust(); return NEQ;}
 "<"						{adjust(); return LT;}
 "<="					{adjust(); return LE;}
@@ -108,7 +108,7 @@ newline (\r\n|\n)
 ":="					{adjust(); return ASSIGN;}
 for  	 				{adjust(); return FOR;}
 {integer}	 			{adjust(); yylval.ival=atoi(yytext); dbgprint(0,"int %d\n",yylval.ival); return INT;}
-while					{adjust(); return FOR; }
+while					{adjust(); return WHILE; }
 to 						{adjust(); return TO;}
 break 					{adjust(); return BREAK;}
 let						{adjust(); return LET;}
@@ -127,14 +127,14 @@ nil  					{adjust(); return NIL;}
 {id}					{adjust(); yylval.sval = strdup(yytext);   dbgprint(1,"%s\n",yylval.sval);  return ID;}
 
 
-\"					    {adjust(); init_string(); BEGIN string;}
+\"					    {adjust(); printf("start string \n"); init_string(); BEGIN string;}
 <string>{
 	\" 					{
 							adjust(); 
 							end_string(); 
 							yylval.sval = strdup(str);
 							BEGIN (0); 
-							//printf("%s\n",yylval.sval);
+							printf("string: %s\n",yylval.sval);
 							return STRING;
 						}
 	\\\"				{	
@@ -143,7 +143,7 @@ nil  					{adjust(); return NIL;}
 							append_char_to_string(yytext[1]);
 							//yylval.sval = strdup(str);
 						}
-	.					{ adjust(); append_char_to_string(*yytext); }
+	.					{ adjust(); printf("char: %c\n",*yytext); append_char_to_string(*yytext); }
 }
 
 "/*"						{/*printf("begin comment");*/ adjust();  BEGIN comment;}

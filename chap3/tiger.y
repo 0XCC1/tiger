@@ -58,9 +58,13 @@ exp:    lvalue
    |    exp MINUS exp {printf(" - \n"); }
    |	exp TIMES exp
    |	exp DIVIDE exp
+   |	MINUS exp %prec UMINUS
    |    INT
-   |	STRING
+   |	STRING		
    |	NIL
+   |	expblock
+   |	BREAK
+   
    
 comparestmt :   exp EQ exp
 			   | exp NEQ exp
@@ -77,20 +81,31 @@ arraydefine: id LBRACK exp RBRACK OF exp
 
 id:     ID {  printf("id %s\n", $1);}
 
-lvalue: id
+lvalue: id		{printf("lvalue \n");}
       | lvalue DOT id
       | lvalue LBRACK exp RBRACK {printf("%s\n", "ARRAY");}
 
 //各种语句
 stmt :  funccall
-     |  assignstmt
+     |  assignstmt	 
      |  ifstmt
 	 |  letstmt
+	 |  forstmt
+	 |  whilestmt
+	
+whilestmt:WHILE exp DO exp    {printf("while stmt\n");}
+	 
+forstmt: FOR id ASSIGN exp TO exp DO exp
+	 
 
+//(exp1;exp2;exp3)
+expblock: LPAREN expseq RPAREN
+	 
 //let 语句	 
 letstmt: LET decs IN expseq END
 
 //语句序列
+// exp1;exp2
 expseq:exp
 	| exp SEMICOLON expseq
 	|
@@ -144,4 +159,5 @@ funccall : id LPAREN  args RPAREN { printf("funccall\n" );}
 /*参数*/
 args    : exp COMMA args
         | exp
+		|
 	
