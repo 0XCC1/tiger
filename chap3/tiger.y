@@ -85,6 +85,7 @@ lvalue: id		{printf("lvalue \n");}
       | lvalue DOT id
       | lvalue LBRACK exp RBRACK {printf("%s\n", "ARRAY");}
 
+	  
 //各种语句
 stmt :  funccall
      |  assignstmt	 
