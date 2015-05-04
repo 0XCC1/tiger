@@ -2,8 +2,12 @@
 #include <string.h>
 #include "util.h"
 //#include "tokens.h"
-#include "y.tab.h"
+
 #include "errormsg.h"
+#include "symbol.h"
+#include "absyn.h"
+#include "table.h"
+#include "y.tab.h"
 
 #define	OVER_MEM_ERR printf("%s (max_length: %d)", \
 						"usage: string out of memrory!", MAX_LENGTH);\

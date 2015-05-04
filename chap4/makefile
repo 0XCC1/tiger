@@ -1,5 +1,5 @@
-a.out: parsetest.o y.tab.o lex.yy.o errormsg.o util.o
-	cc -g parsetest.o y.tab.o lex.yy.o errormsg.o util.o
+a.out: parsetest.o y.tab.o lex.yy.o errormsg.o util.o table.o absyn.o symbol.o
+	cc -g parsetest.o y.tab.o lex.yy.o errormsg.o util.o table.o absyn.o symbol.o
 
 parsetest.o: parsetest.c errormsg.h util.h
 	cc -g -c parsetest.c
@@ -25,5 +25,14 @@ lex.yy.c: tiger.lex
 util.o: util.c util.h
 	cc -g -c util.c
 
+table.o: table.h
+	cc -g -c table.c
+
+absyn.o:  absyn.h
+	cc -g -c absyn.c
+symbol.o: symbol.h
+	cc -g -c symbol.c
+
+
 clean: 
-	rm -f a.out util.o parsetest.o lex.yy.o errormsg.o y.tab.c y.tab.h y.tab.o
+	rm -f a.out util.o parsetest.o lex.yy.o errormsg.o  absyn.o symbol.o table.o y.tab.c y.tab.h y.tab.o  y.output *.exe

@@ -8,7 +8,8 @@
 #include "absyn.h"  /* abstract syntax data structures */
 
 A_var A_SimpleVar(A_pos pos, S_symbol sym)
-{A_var p = checked_malloc(sizeof(*p));
+{
+ A_var p = checked_malloc(sizeof(*p));
  p->kind=A_simpleVar;
  p->pos=pos;
  p->u.simple=sym;

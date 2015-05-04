@@ -15,13 +15,27 @@ typedef struct A_dec_ *A_dec;
 typedef struct A_ty_ *A_ty;
 
 typedef struct A_decList_ *A_decList;
+
+//函数参数这种表达式
 typedef struct A_expList_ *A_expList;
+
 typedef struct A_field_ *A_field;
+//声明record中的域和函数声明时 的形参
 typedef struct A_fieldList_ *A_fieldList;
+
+//函数相关
 typedef struct A_fundec_ *A_fundec;
 typedef struct A_fundecList_ *A_fundecList;
+
+//别名类型相关
 typedef struct A_namety_ *A_namety;
 typedef struct A_nametyList_ *A_nametyList;
+
+// 定义record实例时候用的 数据列表
+/*
+type list = {first: int, rest: list}
+list{first=i,rest=readlist()
+*/
 typedef struct A_efield_ *A_efield;
 typedef struct A_efieldList_ *A_efieldList;
 
@@ -41,20 +55,20 @@ typedef enum {
 struct A_var_
        {
 		    enum {
-					A_simpleVar, 
-					A_fieldVar, 
-					A_subscriptVar
+					A_simpleVar, //a
+					A_fieldVar, //a.c
+					A_subscriptVar //a[exp]
 			} kind;
 			A_pos pos;
 			union {
-					S_symbol simple;
+					S_symbol simple; //
 				    struct {
-						A_var var;
-						S_symbol sym;
-					} field;
+						A_var var; //a
+						S_symbol sym; //c
+					} field; 	
 					struct {
-						A_var var;
-						A_exp exp;
+						A_var var; //a
+						A_exp exp; //exp
 					} subscript;
 			} u;
        };
@@ -84,9 +98,9 @@ struct A_exp_
 			  /* nil; - needs only the pos */
 			  int intt;
 			  string stringg;
-			  struct {S_symbol func; A_expList args;} call;
-			  struct {A_oper oper; A_exp left; A_exp right;} op;
-			  struct {S_symbol typ; A_efieldList fields;} record;
+			  struct {S_symbol func; A_expList args;} call;//func()
+			  struct {A_oper oper; A_exp left; A_exp right;} op; //a op b
+			  struct {S_symbol typ; A_efieldList fields;} record; //
 			  A_expList seq;
 			  struct {A_var var; A_exp exp;} assign;
 			  struct {A_exp test, then, elsee;} iff; /* elsee is optional */
@@ -98,6 +112,7 @@ struct A_exp_
 	    } u;
      };
 
+//declare
 struct A_dec_ 
     {
 		enum {
@@ -118,7 +133,7 @@ struct A_dec_
 	    A_nametyList type;
 	  } u;
    };
-
+//type
 struct A_ty_ {
 			enum {
 				A_nameTy, 
@@ -134,30 +149,49 @@ struct A_ty_ {
 	    };
 
 /* Linked lists and nodes of lists */
-
+//record
 struct A_field_ {S_symbol name, typ; A_pos pos; bool escape;};
+
+//record中的域，声明函数时的形参
 struct A_fieldList_ {A_field head; A_fieldList tail;};
+
+//a=3,”abc”,b=a+1
 struct A_expList_ {A_exp head; A_expList tail;};
-struct A_fundec_ {A_pos pos;
-                 S_symbol name; A_fieldList params; 
-		 S_symbol result; A_exp body;};
+struct A_fundec_ {
+				A_pos pos;
+				S_symbol name; 
+				A_fieldList params; 
+				S_symbol result; 
+				A_exp body;
+};
 
 struct A_fundecList_ {A_fundec head; A_fundecList tail;};
+
+//声明列表,用于Tiger语言的声明块结构
 struct A_decList_ {A_dec head; A_decList tail;};
+
+//类型别名
 struct A_namety_ {S_symbol name; A_ty ty;};
 struct A_nametyList_ {A_namety head; A_nametyList tail;};
+
+//record relative 
+// type list = {first: int, rest: list}
 struct A_efield_ {S_symbol name; A_exp exp;};
 struct A_efieldList_ {A_efield head; A_efieldList tail;};
 
 
 /* Function Prototypes */
+/*变量*/
 A_var A_SimpleVar(A_pos pos, S_symbol sym);
 A_var A_FieldVar(A_pos pos, A_var var, S_symbol sym);
 A_var A_SubscriptVar(A_pos pos, A_var var, A_exp exp);
+
+/*表达式*/
 A_exp A_VarExp(A_pos pos, A_var var);
 A_exp A_NilExp(A_pos pos);
 A_exp A_IntExp(A_pos pos, int i);
 A_exp A_StringExp(A_pos pos, string s);
+//参数用 A_expList
 A_exp A_CallExp(A_pos pos, S_symbol func, A_expList args);
 A_exp A_OpExp(A_pos pos, A_oper oper, A_exp left, A_exp right);
 A_exp A_RecordExp(A_pos pos, S_symbol typ, A_efieldList fields);
@@ -169,20 +203,33 @@ A_exp A_ForExp(A_pos pos, S_symbol var, A_exp lo, A_exp hi, A_exp body);
 A_exp A_BreakExp(A_pos pos);
 A_exp A_LetExp(A_pos pos, A_decList decs, A_exp body);
 A_exp A_ArrayExp(A_pos pos, S_symbol typ, A_exp size, A_exp init);
+
+/*声明*/
 A_dec A_FunctionDec(A_pos pos, A_fundecList function);
 A_dec A_VarDec(A_pos pos, S_symbol var, S_symbol typ, A_exp init);
 A_dec A_TypeDec(A_pos pos, A_nametyList type);
+
+/*类型*/
+//type myint = int
 A_ty A_NameTy(A_pos pos, S_symbol name);
+//type any = {any : int}
 A_ty A_RecordTy(A_pos pos, A_fieldList record);
+//type intArray = array of int
 A_ty A_ArrayTy(A_pos pos, S_symbol array);
+
+
 A_field A_Field(A_pos pos, S_symbol name, S_symbol typ);
 A_fieldList A_FieldList(A_field head, A_fieldList tail);
+
 A_expList A_ExpList(A_exp head, A_expList tail);
-A_fundec A_Fundec(A_pos pos, S_symbol name, A_fieldList params, S_symbol result,
-		  A_exp body);
+
+A_fundec A_Fundec(A_pos pos, S_symbol name, A_fieldList params, S_symbol result,A_exp body);
 A_fundecList A_FundecList(A_fundec head, A_fundecList tail);
+
 A_decList A_DecList(A_dec head, A_decList tail);
+
 A_namety A_Namety(S_symbol name, A_ty ty);
 A_nametyList A_NametyList(A_namety head, A_nametyList tail);
+
 A_efield A_Efield(S_symbol name, A_exp exp);
 A_efieldList A_EfieldList(A_efield head, A_efieldList tail);
