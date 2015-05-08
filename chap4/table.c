@@ -18,13 +18,9 @@ struct TAB_table_ {
 
 
 static binder Binder(void *key, void *value, binder next, void *prevtop)
-{
-	binder b = checked_malloc(sizeof(*b));
-	b->key =key; 
-	b->value=value; 
-	b->next=next; 
-	b->prevtop = prevtop; 
-	return b;
+{binder b = checked_malloc(sizeof(*b));
+ b->key = key; b->value=value; b->next=next; b->prevtop = prevtop; 
+ return b;
 }
 
 TAB_table TAB_empty(void)
@@ -46,24 +42,10 @@ TAB_table TAB_empty(void)
  * reasonable and repeatable index into the table will result.
  */
 
- /*
- table 
- table size=127
-------
-|	
-------
-|
-------
-|
-------
-.....
- 
- */
 void TAB_enter(TAB_table t, void *key, void *value)
 {int index;
  assert(t && key);
  index = ((unsigned)key) % TABSIZE;
- //设置队列头
  t->table[index] = Binder(key, value,t->table[index], t->top);
  t->top = key;
 }
