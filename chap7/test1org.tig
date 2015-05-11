@@ -1,0 +1,10 @@
+/* an array type and an array variable */
+let
+	type  arrtype = array of int
+	type  retyname=arrtype
+	var arr1:arrtype := arrtype [10] of 0
+	type type1 ={first:int,second:type2}
+	type type2 ={first:int}
+in
+	"3"
+end

@@ -1,0 +1,17 @@
+/* an array type and an array variable */
+let
+	type  arrtype = array of int
+	var arr1:arrtype := arrtype [10] of 0	
+	var intvar: int := 45
+	type any = {any : int}
+	type myrecord = {field1 : int, field2:int}
+	var  myrecordInstance:=myrecord{field1=1,field2=2}
+	function fun1(arg1:int, arg2:string,int:arg3) :int =(
+	
+		intvar
+	)
+in
+	
+	fun1(arr1=9,"asdf",myrecordInstance.field1.field2);
+	intvar
+end
